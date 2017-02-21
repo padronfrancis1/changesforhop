@@ -125,4 +125,10 @@ app.use(function(err, req, res, next) {
 
 // http.createServer(app).listen(80);
 
+
 module.exports = app;
+var port = Number(process.env.PORT || 80);
+// var port = Number(process.env.PORT);
+http.createServer(app).listen(port);
+
+// module.exports = app;
