@@ -5,7 +5,7 @@ var moment = require('moment');
 
 // var https = require('https');
 // var fs = require('fs');
-// var http = require('http');
+var http = require('http');
 
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
