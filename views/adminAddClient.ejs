@@ -52,11 +52,11 @@
               <md-card-content>
                 <form method="POST" name="signupForm" action="/admin/add/client">
 
+                <label>First Name</label>
                   <md-input-container class="md-block">
                     <input type="text"
                     id="fname" name="fname"
-                    placeholder="Enter First Name" 
-                    ng-model="formData.fname"
+                    ng-model="fname"
                     required minlength="2" maxlength="100"
                     >
                     <div ng-messages="signupForm.fname.$error" role="alert">
@@ -66,12 +66,11 @@
                     </div>
                   </md-input-container>
 
-
+                  <label>Middle Name</label>
                   <md-input-container class="md-block">
                     <input type="text"
                     id="mname" name="mname"
-                    placeholder="Enter Middle Name" 
-                    ng-model="formData.mname"
+                    ng-model="mname"
                     required minlength="2" maxlength="100"
                     >
                     <div ng-messages="signupForm.mname.$error" role="alert">
@@ -81,11 +80,11 @@
                     </div>
                   </md-input-container>
 
+                  <label>Last Name</label>
                   <md-input-container class="md-block">
                     <input type="text"
                     id="lname" name="lname"
-                    placeholder="Enter Last Name" 
-                    ng-model="formData.lname"
+                    ng-model="lname"
                     required minlength="2" maxlength="100"
                     >
                     <div ng-messages="signupForm.lname.$error" role="alert">
@@ -95,11 +94,11 @@
                     </div>
                   </md-input-container>
 
+                  <label>Age</label>
                   <md-input-container class="md-block">
                     <input type="number"
                     id="age" name="age"
-                    placeholder="Age" 
-                    ng-model="formData.age"
+                    ng-model="age"
                     required minlength="1" maxlength="100"
                     >
                     <div ng-messages="signupForm.age.$error" role="alert">
@@ -118,7 +117,7 @@
  -->
                   </md-input-container>
 
-                  <md-input-container class="md-block">
+                  <!-- <md-input-container class="md-block">
                     <input type="text"
                     id="gender" name="gender"
                     placeholder="Gender" 
@@ -130,12 +129,42 @@
                         Input must be between 2 and 100 characters long.
                       </div>
                     </div>
+                  </md-input-container> -->
+                  <label>Gender</label>
+                  <md-input-container class="md-block">
+                    <md-select ng-model="gender" id="gender" name="gender" required minlength="2" maxlength="100">
+
+                      <md-option ng-repeat="state in genders" ng-value="state.abbrev">
+                        {{state.abbrev}}
+                      </md-option>
+                    </md-select>
+                    <div ng-messages="signupForm.gender.$error" role="alert">
+                      <div ng-message-exp="['required', 'minlength', 'maxlength']" style="color: red;">
+                        Input must be between 2 and 100 characters long.
+                      </div>
+                    </div>
                   </md-input-container>
 
-                  <md-input-container class="md-block">
+                  <label>Status</label>
+                  <md-input-container class="md-block">                    
+                    <md-select ng-model="statusState" id="status" name="status" required minlength="2" maxlength="100">
+                      
+                      <md-option ng-repeat="state in statuses" ng-value="state.abbrev">
+                        {{state.abbrev}}
+                      </md-option>
+                    </md-select>
+                    <div ng-messages="signupForm.status.$error" role="alert">
+                      <div ng-message-exp="['required', 'minlength', 'maxlength']" style="color: red;">
+                        Input must be between 2 and 100 characters long.
+                      </div>
+                    </div>
+                  </md-input-container>
+
+
+                  <!-- <md-input-container class="md-block">
+                    <label>Status</label>
                     <input type="text"
                     id="status" name="status"
-                    placeholder="Status" 
                     ng-model="formData.status"
                     required minlength="2" maxlength="100"
                     >
@@ -144,7 +173,10 @@
                         Input must be between 2 and 100 characters long.
                       </div>
                     </div>
-                  </md-input-container>
+                  </md-input-container> -->
+
+
+
 
                   <button type="submit" class="btn btn-default"> Submit </button>
 

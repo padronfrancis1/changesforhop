@@ -86,7 +86,9 @@ exports.ListAllClient = function(req, res)
 exports.GetClientProfile = function(req, res) 
 {
 
-
+	console.log(req.body.fnames);
+	console.log(req.body.mnames);
+	console.log(req.body.lnames);
 	Clients.findOne({ FirstName: req.body.fnames, LastName: req.body.lnames, MiddleName: req.body.mnames }).exec(function(err, client) {
 
 		if(!client){

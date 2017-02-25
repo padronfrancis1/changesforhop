@@ -32,208 +32,230 @@ myApp.controller('MyCtrl',['$scope', '$http', '$filter',  '$interval', '$mdSiden
 
 
 
-	  $scope.today = function() {
-	    $scope.dt = new Date();
-	  };
+		$scope.today = function() {
+		$scope.dt = new Date();
+		};
 
-	  $scope.today();
+		$scope.today();
 
-	  $scope.clear = function() {
-	    $scope.dt = null;
-	  };
+		$scope.clear = function() {
+		$scope.dt = null;
+		};
 
-	  $scope.options = {
-	    customClass: getDayClass,
-	    minDate: new Date(),
-	    showWeeks: true
-	  };
+		$scope.options = {
+		customClass: getDayClass,
+		minDate: new Date(),
+		showWeeks: true
+		};
 
-	  // Disable weekend selection
-	  function disabled(data) {
-	    var date = data.date,
-	      mode = data.mode;
-	    return mode === 'day' && (date.getDay() === 0 || date.getDay() === 6);
-	  }
+		$scope.genderState = '';
+        $scope.genders = ('Male Female').split(' ').map(function (state) { return { abbrev: state }; });
 
-	  $scope.toggleMin = function() {
-	    $scope.options.minDate = $scope.options.minDate ? null : new Date();
-	  };
+        $scope.statusState = '';
+        $scope.statuses = ('Approved Declined').split(' ').map(function (state) { return { abbrev: state }; });
 
-	  $scope.toggleMin();
+		// Disable weekend selection
+		function disabled(data) {
+		var date = data.date,
+		  mode = data.mode;
+		return mode === 'day' && (date.getDay() === 0 || date.getDay() === 6);
+		}
 
-	  $scope.setDate = function(year, month, day) {
-	    $scope.dt = new Date(year, month, day);
-	  };
+		$scope.toggleMin = function() {
+		$scope.options.minDate = $scope.options.minDate ? null : new Date();
+		};
 
-	  var tomorrow = new Date();
-	  tomorrow.setDate(tomorrow.getDate() + 1);
-	  var afterTomorrow = new Date(tomorrow);
-	  afterTomorrow.setDate(tomorrow.getDate() + 1);
-	  $scope.events = [
-	    {
-	      date: tomorrow,
-	      status: 'full'
-	    },
-	    {
-	      date: afterTomorrow,
-	      status: 'partially'
-	    }
-	  ];
+		$scope.toggleMin();
 
-	  function getDayClass(data) {
-	    var date = data.date,
-	      mode = data.mode;
-	    if (mode === 'day') {
-	      var dayToCheck = new Date(date).setHours(0,0,0,0);
+		$scope.setDate = function(year, month, day) {
+		$scope.dt = new Date(year, month, day);
+		};
 
-	      for (var i = 0; i < $scope.events.length; i++) {
-	        var currentDay = new Date($scope.events[i].date).setHours(0,0,0,0);
+		var tomorrow = new Date();
+		tomorrow.setDate(tomorrow.getDate() + 1);
+		var afterTomorrow = new Date(tomorrow);
+		afterTomorrow.setDate(tomorrow.getDate() + 1);
+		$scope.events = [
+		{
+		  date: tomorrow,
+		  status: 'full'
+		},
+		{
+		  date: afterTomorrow,
+		  status: 'partially'
+		}
+		];
 
-	        if (dayToCheck === currentDay) {
-	          return $scope.events[i].status;
-	        }
-	      }
-	    }
+		function getDayClass(data) {
+		var date = data.date,
+		  mode = data.mode;
+		if (mode === 'day') {
+		  var dayToCheck = new Date(date).setHours(0,0,0,0);
 
-	    return '';
-	  }
+		  for (var i = 0; i < $scope.events.length; i++) {
+		    var currentDay = new Date($scope.events[i].date).setHours(0,0,0,0);
+
+		    if (dayToCheck === currentDay) {
+		      return $scope.events[i].status;
+		    }
+		  }
+		}
+
+		return '';
+		}
 
 
 
-	var tick = function() {
-	  $scope.clock = Date.now();
-	}
+		var tick = function() {
+		$scope.clock = Date.now();
+		}
 
-	tick();
+		tick();
 
-	$interval(tick, 1000);
+		$interval(tick, 1000);
 
-    $http.get('/client/source').then(function(response){
+		$http.get('/client/source').then(function(response){
 
-    	$scope.clients = response.data;
-    });
-
-    // $scope.userExist = false;
-    $scope.userExist = "";
-    $scope.checkUserName = function(req, res)
-    {
-    	$scope.userExist = "";
-
-    	console.log("Checking username"); //username
-    	$http.post('/checkUserName', $scope.formData).success(function(data){
-
-    		// if(data) 
-    		// {
-    		// 	$scope.userExist = true;
-    		// } else
-    		// {
-    		// 	$scope.userExist = false;
-    		// }
-			
-			$scope.userExist = data;
-
+			$scope.clients = response.data;
 		});
-    }
 
-
-    $scope.getClientInfo = function(req, res) {
-
-    	$scope.info = null;
-		$scope.formData.info = "";
-		$scope.formData.msg = "";
-		$scope.formData.fnameu = "";
-		$scope.formData.mnameu = "";
-		$scope.formData.lnameu = "";
-		$scope.formData.ageu = "";
-		$scope.formData.genderu = "";
-		$scope.formData.statusu = "";
-
-		$http.post('/view/clientsProfile', $scope.formData).success(function(data){
-
-			console.log(data);
-			$scope.info = data;
-
-			$scope.change = function() {
-				$scope.formData.fnameu = $scope.info.FirstName;
-				$scope.formData.mnameu = $scope.info.MiddleName;
-				$scope.formData.lnameu = $scope.info.LastName;
-				$scope.formData.ageu = $scope.info.Age;
-				$scope.formData.genderu = $scope.info.Gender;
-				$scope.formData.statusu = $scope.info.Status;
-			}
-
-		});
-	}
-
-	$scope.UpdateClient = function(req, res) {
-		// $http.post('/view/clientsProfile', {FirstName: $scope.fname, Lastname: $scope.lname }).success(function(msg){
-
-		$http.post('/client/update', $scope.formData).success(function(updateCleintdata){
-
-			console.log(updateCleintdata);
-			$scope.formDataUpdate = updateCleintdata;
-
-		});
-	}
-	 
-	$scope.AddProgressReport = function(req, res) {
 		
-		
-		$scope.date = new Date();
-		$scope.converted_date = $filter('date')($scope.clock, 'medium'); // for conversion to string
-		$scope.formData.progressReport_date = $scope.converted_date;
 
-		$http.post('/employee/client/AddProgressReport', $scope.formData).success(function(data){
 
-			if(data) {
 
-				$scope.progressReport = data;
+
+		// $scope.userExist = false;
+		$scope.userExist = "";
+		$scope.checkUserName = function(req, res) {
+			$scope.userExist = "";
+
+			console.log("Checking username"); //username
+
+			$http.post('/checkUserName', $scope.formData).success(function(data){
+
 				
-			} else {
+				$scope.userExist = data;
 
-				console.log("Progress Report not Added");
-
-			}
-			
-
-		});
-	}
-
-	$scope.ViewProgressReport = function(req, res) {
-
-		$scope.convertedMonthlyReport = $filter('date')($scope.dt, 'medium'); // for conversion to string
-		$scope.formData.progressMonthlyReport = $scope.convertedMonthlyReport;
-
-		$http.post('/employee/client/ViewProgressReport', $scope.formData).success(function(data){
-				console.log(data);
-				$scope.progressReport = data;
 			});
-	}
+		}
 
-	$scope.ViewProgressReportSpecific = function(req, res) {
+		$scope.change = function() {
+			
+			$scope.formData.fnameu = $scope.info.FirstName;
+			$scope.formData.mnameu = $scope.info.MiddleName;
+			$scope.formData.lnameu = $scope.info.LastName;
+			$scope.formData.ageu = $scope.info.Age;
+			$scope.formData.genderu = $scope.info.Gender;
+			$scope.formData.statusu = $scope.info.Status;
+		}
 
-		$http.post('/employee/client/ViewProgressReportSpecific', $scope.formData).success(function(data){
-			console.log(data);
-			$scope.progressReportSpecific = data;
-		});
-	}
+		$scope.prefill = [{fnames: "prefill"}];
+		
+		$scope.goToPerson = function(fname, mname, lname) {
+			$scope.formData = {}
+			$scope.formData.fnames = fname;
+			$scope.formData.mnames = mname;
+			$scope.formData.lnames = lname;
 
-	$scope.toggleLeft = buildToggler('left');
-    $scope.toggleRight = buildToggler('right');
+			$http.post('/view/clientsProfile', $scope.formData).success(function(data){
 
-    function buildToggler(componentId) {
-      return function() {
-        $mdSidenav(componentId).toggle();
-      };
-    }
+				$scope.info = data;
+				//console.log(data);
 
-
-    $scope.status = '  ';
-  	$scope.customFullscreen = $mdMedia('xs') || $mdMedia('sm');
+			});
+		}
 
 
-	$scope.showUsersModal = function(ev)
-	{
+		$scope.getClientInfo = function(req, res) {
+
+			$scope.info = null;
+			$scope.formData.info = "";
+			$scope.formData.msg = "";
+			$scope.formData.fnameu = "";
+			$scope.formData.mnameu = "";
+			$scope.formData.lnameu = "";
+			$scope.formData.ageu = "";
+			$scope.formData.genderu = "";
+			$scope.formData.statusu = "";
+
+			$http.post('/view/clientsProfile', $scope.formData).success(function(data){
+
+				console.log(data);
+				$scope.info = data;
+
+			});
+		}
+
+		
+
+		$scope.UpdateClient = function(req, res) {
+
+			$http.post('/client/update', $scope.formData).success(function(updateCleintdata){
+
+				console.log(updateCleintdata);
+				$scope.formDataUpdate = updateCleintdata;
+
+			});
+		}
+
+		$scope.AddProgressReport = function(req, res) {
+
+
+			$scope.date = new Date();
+			$scope.converted_date = $filter('date')($scope.clock, 'medium'); // for conversion to string
+			$scope.formData.progressReport_date = $scope.converted_date;
+
+			$http.post('/employee/client/AddProgressReport', $scope.formData).success(function(data){
+
+				if(data) {
+
+					$scope.progressReport = data;
+					
+				} else {
+
+					console.log("Progress Report not Added");
+
+				}
+				
+
+			});
+		}
+
+		$scope.ViewProgressReport = function(req, res) {
+
+			$scope.convertedMonthlyReport = $filter('date')($scope.dt, 'medium'); // for conversion to string
+			$scope.formData.progressMonthlyReport = $scope.convertedMonthlyReport;
+
+			$http.post('/employee/client/ViewProgressReport', $scope.formData).success(function(data){
+					console.log(data);
+					$scope.progressReport = data;
+				});
+			}
+
+			$scope.ViewProgressReportSpecific = function(req, res) {
+
+			$http.post('/employee/client/ViewProgressReportSpecific', $scope.formData).success(function(data){
+				console.log(data);
+				$scope.progressReportSpecific = data;
+			});
+		}
+
+		$scope.toggleLeft = buildToggler('left');
+		$scope.toggleRight = buildToggler('right');
+
+		function buildToggler(componentId) {
+			return function() {
+				$mdSidenav(componentId).toggle();
+			};
+		}
+
+
+		$scope.status = '  ';
+		$scope.customFullscreen = $mdMedia('xs') || $mdMedia('sm');
+
+
+		$scope.showUsersModal = function(ev)
+		{
 
 		var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
 
@@ -261,9 +283,9 @@ myApp.controller('MyCtrl',['$scope', '$http', '$filter',  '$interval', '$mdSiden
 		}, function(wantsFullScreen) {
 		$scope.customFullscreen = (wantsFullScreen === true);
 		});
-	};
+		};
 
-	$scope.showEmployeeLogsModal = function(ev) {
+		$scope.showEmployeeLogsModal = function(ev) {
 		var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
 
 		$mdDialog.show({
@@ -278,23 +300,23 @@ myApp.controller('MyCtrl',['$scope', '$http', '$filter',  '$interval', '$mdSiden
 			$scope.status = 'You said the information was "' + answer + '".';
 		}, function() {
 			$scope.status = 'You cancelled the dialog.';
-	});
+		});
 
 
 
 
-	$scope.$watch(function() {
+		$scope.$watch(function() {
 		return $mdMedia('xs') || $mdMedia('sm');
-	}, function(wantsFullScreen) {
+		}, function(wantsFullScreen) {
 			$scope.customFullscreen = (wantsFullScreen === true);
 		});
-	};
+		};
 
 
-	function DialogController($scope, $http, $mdDialog, $filter) {
+		function DialogController($scope, $http, $mdDialog, $filter) {
 
 
-	
+
 		// $scope.data = items;
 
 		var tick = function() {
@@ -317,8 +339,8 @@ myApp.controller('MyCtrl',['$scope', '$http', '$filter',  '$interval', '$mdSiden
 
 
 		$scope.AddProgressReport = function(req, res) {
-		
-		
+
+
 			$scope.date = new Date();
 			$scope.converted_date = $filter('date')($scope.clock, 'medium'); // for conversion to string
 			
@@ -377,8 +399,8 @@ myApp.controller('MyCtrl',['$scope', '$http', '$filter',  '$interval', '$mdSiden
 			}
 		};
 
-		
-		
+
+
 		$scope.SearchEmployees = function(res, req)
 		{
 			
@@ -390,7 +412,7 @@ myApp.controller('MyCtrl',['$scope', '$http', '$filter',  '$interval', '$mdSiden
 				$scope.empInformation = data;
 			});
 		};
-	}
+		}
 
 }]);
 

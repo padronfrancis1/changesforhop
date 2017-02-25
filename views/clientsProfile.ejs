@@ -22,6 +22,25 @@
       md-backdrop.md-sidenav-backdrop{
           display:none
       }
+      .listdemoListControls md-divider {
+        margin-top: 0;
+        margin-bottom: 0; }
+
+      .listdemoListControls md-list {
+        padding-top: 0; }
+
+      .listdemoListControls md-list-item > p,
+      .listdemoListControls md-list-item > .md-list-item-inner > p,
+      .listdemoListControls md-list-item .md-list-item-inner > p,
+      .listdemoListControls md-list-item .md-list-item-inner > .md-list-item-inner > p {
+        -webkit-user-select: none;
+        /* Chrome all / Safari all */
+        -moz-user-select: none;
+        /* Firefox all */
+        -ms-user-select: none;
+        /* IE 10+ */
+        user-select: none;
+        /* Likely future */ }
     </style>
 
 
@@ -66,23 +85,35 @@
               <input type="text" ng-model="nameText">
 
               <h3>All Cients List</h3>
-              <div class="form-container" style="overflow-x: scroll;">
 
-                <ul>
+              <div class="form-container" style="overflow-x: scroll;">
+              
+
+                  <ul ng-repeat="person in clients| filter:nameText" ng-click="goToPerson(person.FirstName, person.MiddleName,person.LastName)">
+                    <li>
+                    {{ person.FirstName }}
+                    {{ person.MiddleName }}
+                    {{ person.LastName }}
+                    </li>
+
+                  </lu>
+
+
+                <!-- <ul>
                   <li ng-repeat="info in clients| filter:nameText" style="margin-left:-30px;"><p>Full Name : {{ info.FirstName }} {{ info.MiddleName }} {{ info.LastName }}</p></li>
                 </ul>
-                <div ng-show="!(clients| filter:nameText).length">No Clients Found</div>
+                <div ng-show="!(clients| filter:nameText).length">No Clients Found</div> -->
+
 
               </div>
 
-              
 
+              
             </md-content>
 
           </md-sidenav>
 
-          <div class="col-md-12">
-
+          <div class="col-md-12" ng-hide="true" style="margin-right: 800px;">
             <md-card>
               <md-toolbar class="md-theme-indigo">
                 <h1 class="md-toolbar-tools">Search Client</h1>
@@ -92,8 +123,10 @@
                 <form name="SeachClientInfoForm">
 
                   <md-input-container class="md-block">
-                    <input type="text"
-                    id="fnames" name="fnames"
+                    <input 
+                    type="text"
+                    id="fnames" 
+                    name="fnames"
                     placeholder="Enter First Name" 
                     ng-model="formData.fnames"
                     required minlength="2" maxlength="100"
@@ -104,7 +137,6 @@
                     </div>
                   </div>
                   </md-input-container>
-                  
 
                   <br>
 
@@ -163,7 +195,7 @@
           </div>
 
 
-          <div class="col-md-12" ng-show="info.FirstName != null">
+          <div class="col-md-12">
             <form name="SeachClientInfoForm2">
 
             <md-card>
@@ -175,7 +207,6 @@
               <md-card-content>
 
 
-                      <!-- <input type="text" class="form-control" id="formDataUpdate_infoFirstUpdate" name="infoFirstUpdate" placeholder="Current First Name" ng-model="info.FirstName"  disabled="true"> -->
                     <table>
 
                     <tr>
@@ -354,7 +385,7 @@
 
                       <td>
                         
-                        <md-input-container class="md-block">
+                        <!-- <md-input-container class="md-block">
                           <input 
                           type="text"
                           id="formDataUpdate_infoGenderUpdate"
@@ -369,7 +400,31 @@
                               Input must be between 2 and 100 characters long.
                             </div>
                           </div>
-                        </md-input-container>
+                        </md-input-container> -->
+
+                        
+                        <md-radio-group ng-model="formData.genderu">
+
+                          <md-radio-button value="Male" class="md-primary" ng-style="{'display':'inline'}">Male</md-radio-button>
+                          <md-radio-button value="Female" ng-style="{'display':'inline'}"> Female </md-radio-button>
+                          
+
+                        </md-radio-group>
+
+
+                        <!-- <label>Gender</label>
+                          <md-input-container class="md-block">
+                            <md-select ng-model="genderState" id="formDataUpdate_infoGenderUpdate" name="genderu" required minlength="2" maxlength="100">
+                              <md-option ng-repeat="state in genders" ng-value="state.abbrev">
+                                {{state.abbrev}}
+                              </md-option>
+                            </md-select>
+                            <div ng-messages="SeachClientInfoForm2.gender.$error" role="alert">
+                              <div ng-message-exp="['required', 'minlength', 'maxlength']" style="color: red;">
+                                Input must be between 2 and 100 characters long.
+                              </div>
+                            </div>
+                          </md-input-container> -->
 
                       </td>
                     </tr>
@@ -391,6 +446,14 @@
                       </td>
 
                       <td>
+
+                      <!-- <md-radio-group ng-model="formData.genderu">
+
+                        <md-radio-button value="Male" class="md-primary" ng-style="{'display':'inline'}">Male</md-radio-button>
+                        <md-radio-button value="Female" ng-style="{'display':'inline'}"> Female </md-radio-button>
+                        
+
+                      </md-radio-group> -->
                         
                         <md-input-container class="md-block">
                           <input 

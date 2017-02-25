@@ -165,7 +165,7 @@ var user = function(req, res) {
 			//var _UserTimeLog = mongoose.model('UserTimeLog');
 			//var _UserTimeLogs = new UserTimeLogs(mongoose.model('UserTimeLogs'));
 
-			console.log(currentTime);
+			// mongodb://localhost/changesforhope
 
 			mongoose.Promise = global.Promise;
 			var db = mongoose.createConnection('mongodb://admin:admin@ds145329.mlab.com:45329/changesforhope');
