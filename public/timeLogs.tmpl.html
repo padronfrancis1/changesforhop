@@ -109,14 +109,25 @@
                 <!-- <input required type="email" name="empEmailTimeLog" ng-model="formData.empEmailTimeLog"
                        minlength="10" maxlength="100" ng-pattern="/^.+@.+\..+$/" /> -->
 
-                <input required type="text" name="empUserNameTimeLog" ng-model="formData.empUserNameTimeLog"
-                 minlength="2" maxlength="100" />
+                <input type="text" name="empUserNameTimeLog" ng-model="formData.empUserNameTimeLog" />
 
-                <div ng-messages="EmpInfoForm.empUserNameTimeLog.$error" role="alert">
+                <!-- <div ng-messages="EmpInfoForm.empUserNameTimeLog.$error" role="alert">
                   <div ng-message-exp="['required', 'minlength', 'maxlength']">
                     Your username must be between 2 and 100 characters long.
                   </div>
-                </div>
+                </div> -->
+
+              </md-input-container>
+
+              <p>Or</p>
+
+              <md-input-container class="md-block">
+                <label>Employee Email</label>
+                <!-- <input required type="email" name="empEmailTimeLog" ng-model="formData.empEmailTimeLog"
+                       minlength="10" maxlength="100" ng-pattern="/^.+@.+\..+$/" /> -->
+
+                <input type="text" name="empEmailTimeLog" ng-model="formData.empEmailTimeLog" />
+
 
               </md-input-container>
 
@@ -128,7 +139,7 @@
 
               <md-input-container class="md-block">
 
-                <input required type="text" name="EmpInfoForDateLog" ng-model="formData.EmpInfoForDateLog" ng-disabled="true" ng-hide="true" />
+                <input type="text" name="EmpInfoForDateLog" ng-model="formData.EmpInfoForDateLog" ng-disabled="true" ng-hide="true" />
 
                 <p ng-show="NullDate" style="color: red;">Please provide a date by selecting below</p>
 
@@ -149,8 +160,14 @@
                 </div>
               </md-input-container>
 
-              <md-dialog-actions layout="row">
+              <!-- <md-dialog-actions layout="row">
                 <md-button ng-click="ShowTimeLogs()" md-autofocus type="submit" ng-show="formData.empUserNameTimeLog != null && formData.empUserNameTimeLog.length > 3">
+                  Search Employee Log
+                </md-button>
+              </md-dialog-actions> -->
+
+              <md-dialog-actions layout="row">
+                <md-button ng-click="ShowTimeLogs()" md-autofocus type="submit">
                   Search Employee Log
                 </md-button>
               </md-dialog-actions>
@@ -168,17 +185,20 @@
                     <span>Search Results</span>
                   </div>
                 </md-toolbar>
+
+                <h4>{{ logs[0].CurrentDate }}</h4>
+
                 <div ng-repeat="info in logs" style="padding-left: 3%;">
 
                   <table md-table>
                     <thead md-head>
 
-                      <tr md-row>
+                      <!-- <tr md-row>
                         <th md-column>
                           <h4>{{ info.CurrentDate }}</h4>
                         </th>
 
-                      </tr>
+                      </tr> -->
 
                     </thead>
                     
@@ -195,7 +215,11 @@
                     </tbody>
 
                   </table>
+
                 </div>
+                <md-content>
+                  <md-button class="md-accent md-raised" ng-click="DownloadCSV()">Download as csv</md-button>
+                </md-content>
               </div>
             </div>
             </md-table-container>

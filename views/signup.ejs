@@ -107,6 +107,21 @@
                   </md-input-container>
 
                   <md-input-container class="md-block">
+                    <input type="text"
+                    id="lastname" name="lastname"
+                    placeholder="Enter Last Name" 
+                    ng-model="formData.lastname"
+                    required minlength="2" maxlength="100"
+                    >
+                    <div ng-messages="signupForm.lastname.$error" role="alert">
+                      <div ng-message-exp="['required', 'minlength', 'maxlength']" style="color: red;">
+                        Input must be between 2 and 100 characters long.
+                      </div>
+                    </div>
+
+                  </md-input-container>
+
+                  <md-input-container class="md-block">
                     <input type="number"
                     id="phonenumber" name="phonenumber"
                     placeholder="Enter Phone Name" 
@@ -211,7 +226,7 @@
 
     <script src="/js/angular-material-data-table/dist/md-data-table.js"></script>
     <script src="/js/angular-messages/angular-messages.js"></script>
-
+    <script src="/js/ng-file-upload/ng-file-upload.js"></script>
     <script src="/angular_controllers/gen_ctrl.js"></script>
 
 

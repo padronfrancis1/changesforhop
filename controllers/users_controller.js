@@ -2,17 +2,48 @@
 var crypto = require('crypto');
 var mongoose = require('mongoose'),
 	User = mongoose.model('User'),
+	Files = mongoose.model('fs.files'),
 	UserTimeLogs = mongoose.model('UserTimeLogs');
 
-var moment = require('moment');
 
+
+exports.DownloadFile = function(res, req) {
+
+	console.log("API reached -- Download");
+	var uri = 'mongodb://admin:admin@ds145329.mlab.com:45329/changesforhope';
+
+	mongodb.MongoClient.connect(uri, function(error, db){
+		assert.ifError(error);
+		if(error) {
+			console.log(error);
+		} else {
+			console.log(db);
+			var bucket = new mongodb.GridFSBucket(db,{ bucketname: 'changesforhopefiles'});
+
+			bucket.openDownloadStreamByName('sourcefile.pdf').
+			  pipe(fs.createWriteStream('./out.pdf')).
+			  on('error', function(error) {
+			    assert.ifError(error);
+			  }).
+			  on('finish', function() {
+			    console.log('downloaded!');
+			    // process.exit(0);
+			  });
+
+			}
+		});
+
+};
+
+
+
+var moment = require('moment');
 
 function hashPW(pwd) {
 	return crypto.createHash('sha256').update(pwd).digest('base64').toString();
 }
 
-exports.checkUserName = function(req, res)
-{
+exports.checkUserName = function(req, res) {
 	console.log(req.body.username)
 	User.findOne({ username: req.body.username }).exec(function(err, user)
 	{
@@ -33,23 +64,12 @@ exports.signup = function(req, res) {
 
 		if(user) {
 
-			// req.session.msg = "test";
 			console.log("User Name already taken");
 			
 			res.render('/signup');
 
 		} else {
 
-			// console.log("USER Now saving");
-			// console.log(req.body.username)
-			// console.log(hashPW(req.body.password));
-			// console.log(req.body.firstname);
-			// console.log(req.body.middlename);
-			// console.log(req.body.lastname);
-			// console.log(req.body.phonenumber);
-			// console.log(req.body.address);
-			// console.log(req.body.permission);
-			// console.log(req.body.email);
 
 			var user = new User(mongoose.model('User'));
 
@@ -92,14 +112,19 @@ exports.login = function(req, res) {
 
 	if( req.body.username == "admin") {
 		admin(req, res);
-		// console.log("Trying toi access admin account");
 	} else {
 		user(req, res);
 	}
 };
 
 function admin(req, res) {
-	User.findOne({ username: "admin" }).exec(function(err, user) {
+
+	var date = new Date();
+
+	var currentDate = moment(date).format('MMMM Do YYYY');
+	var currentTime = moment(date).format('h:mm:ss a');
+
+	User.findOne({ username: req.body.username }).exec(function(err, user) {
 
 		if(!user) {
 
@@ -108,6 +133,28 @@ function admin(req, res) {
 		} else if (user.hashed_password === hashPW(req.body.password.toString())) {
 
 			console.log("You have an admin account");
+
+			mongoose.Promise = global.Promise;
+			var db = mongoose.createConnection('mongodb://admin:admin@ds145329.mlab.com:45329/changesforhope');
+
+			db.collection('users').insert({
+
+				username : req.body.username,
+				email: user.email,
+				CurrentDate : currentDate,
+				TimeIn : currentTime,
+				TimeOut : "NULL",
+
+
+			}, function(err, success){
+				if(err)
+				{
+					console.log(err);
+				} else {
+					console.log(success);
+				}
+			});
+
 
 			req.session.regenerate(function(){
 				
@@ -143,12 +190,10 @@ var user = function(req, res) {
 
 	var date = new Date();
 
-	// var currentDate = moment(date).format('MMMM Do YYYY, h:mm:ss a');
 	var currentDate = moment(date).format('MMMM Do YYYY');
 	var currentTime = moment(date).format('h:mm:ss a');
 	console.log(currentDate);
 	console.log(currentTime);
-	// console.log(currentdate);
 
 	User.findOne({ username: req.body.username }).exec(function(err, user) {
 
@@ -158,20 +203,11 @@ var user = function(req, res) {
 
 		} else if (user.hashed_password === hashPW(req.body.password.toString())) {
 
-			// save log here
-			// var date = new Date();
-			// var current_hour = date.getHours;
-			// moment().format();
-			//var _UserTimeLog = mongoose.model('UserTimeLog');
-			//var _UserTimeLogs = new UserTimeLogs(mongoose.model('UserTimeLogs'));
-
-			// mongodb://localhost/changesforhope
 
 			mongoose.Promise = global.Promise;
 			var db = mongoose.createConnection('mongodb://admin:admin@ds145329.mlab.com:45329/changesforhope');
 
 			db.collection('users').insert({
-			// db.collection('users').insert({username : req.session.email,
 
 				username : req.body.username,
 				email: user.email,
@@ -189,34 +225,12 @@ var user = function(req, res) {
 				}
 			});
 
-			// _UserTimeLogs.set('username', req.session.username);
-			// _UserTimeLogs.set('TimeIn', currentdate); //Date Time Now and Time
-
-
-			// _UserTimeLogs.save(function(err){
-			// 	if(err) {
-			// 		req.session.msg = err;
-			// 		console.log(err);
-			// 	} else {
-			// 		console.log(currentdate);
-			// 		console.log("Inserted log in time");
-			// 		console.log(req.body.username);
-			// 	}
-			// });
 
 			req.session.regenerate(function(){
-			req.session.user = user.id;
-			req.session.username = user.username;
-			req.session.msg = 'Authenticated as ' + user.username;
-
-
-
-
-
-
-
-
-			res.redirect('/');
+				req.session.user = user.id;
+				req.session.username = user.username;
+				req.session.msg = 'Authenticated as ' + user.username;
+				res.redirect('/');
 			});
 
 
@@ -256,6 +270,7 @@ exports.getUserProfile = function(req, res){
 
 
 exports.logoutUser = function(req, res) {
+
 	console.log("logout Button reached");
 	var date = new Date();
 
@@ -277,6 +292,7 @@ exports.logoutUser = function(req, res) {
 			{
 
 				username : user.username,
+				email : user.email,
 				CurrentDate : currentDate,
 				TimeOut: "NULL"
 			},
@@ -367,8 +383,10 @@ exports.ViewTimeLogs = function(req, res) {
 	console.log(response);
 
 	var currentDate = moment(response).format('MMMM Do YYYY');
-	//progressReports.find({ FirstName: req.body.fnames, MiddleName: req.body.mnames, LastName: req.body.lnames, Date: new RegExp(response, 'i') }).exec(function(err, progressReport) {
-	User.find({username: "user", email: "user", CurrentDate: currentDate }).exec(function(err, user) {
+	
+	// User.find({username: "user", email: "user", CurrentDate: currentDate }).exec(function(err, user) {
+	// User.find({username: req.body.empUserNameTimeLog , CurrentDate: currentDate }).exec(function(err, user) {
+	User.find({ $or: [{ username: req.body.empUserNameTimeLog }, { email: req.body.empEmailTimeLog }] , CurrentDate: currentDate }).exec(function(err, user) {
 
 		if(err) {
 			console.log(err);
@@ -381,8 +399,7 @@ exports.ViewTimeLogs = function(req, res) {
 
 };
 
-exports.SearchEmpInfo = function(req, res)
-{
+exports.SearchEmpInfo = function(req, res) {
 	console.log("I got the search emp info request");
 	console.log(req.body.empEmailSearch);
 
@@ -397,3 +414,15 @@ exports.SearchEmpInfo = function(req, res)
 
 	});
 };
+
+exports.ListFiles = function(req, res) {
+	Files.find({}).exec(function(err, files){
+		if(err) {
+			console.log(err);
+		} else {
+			res.json(files);
+			console.log(files);
+		}
+	});
+
+}

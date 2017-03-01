@@ -4,9 +4,30 @@ var crypto = require('crypto');
 var router = express.Router();
 var users = require('../controllers/users_controller.js');
 var clients = require('../controllers/clients_controller.js');
+var assert = require('assert');
+var fs = require('fs');
+var mongodb = require('mongodb');
 
 
 /* employee logic layer */
+
+var multer  = require('multer');
+
+var storage = require('multer-gridfs-storage')({
+   url: 'mongodb://admin:admin@ds145329.mlab.com:45329/changesforhope'
+});
+
+
+
+var upload = multer({ storage: storage });
+var sUpload = upload.single('file');
+router.post('/multer', sUpload, function (req, res, next) { 
+    /*....*/ 
+    console.log(req.file);
+    res.redirect('/');
+})
+
+
 
 router.get('/', function(req, res, next) {
 
@@ -24,6 +45,22 @@ router.get('/', function(req, res, next) {
 
 });
 
+
+router.get('/DownloadUpload', function(req, res, next) {
+
+  if (req.session.user) {
+
+    res.render('DownloadUpload');
+
+  } else {
+
+    req.session.msg = 'Access denied!';
+
+    res.redirect('/login');
+
+  }
+
+});
 
 router.get('/user', function(req, res, next) {
   
@@ -162,7 +199,6 @@ router.get('/view/clientsProfile', function(req, res, next) {
 
 
     res.render('clientsProfile'); // ejs file
-    console.log("I got the request");
 
   } else {
 
@@ -174,12 +210,20 @@ router.get('/view/clientsProfile', function(req, res, next) {
 
 });
 
+// router.get('/signup', function(req, res, next) {
+
+
+//   res.render('signup');
+
+
+
+// });
 
 router.post('/signup', users.signup);
 router.post('/user/update', users.updateUser);
 router.post('/user/delete', users.deleteUser);
 router.post('/login', users.login);
-// router.post('/logout', users.logoutUser);
+router.post('/logout', users.logoutUser);
 
 router.get('/user/profile', users.getUserProfile); // json source
 
@@ -197,5 +241,10 @@ router.post('/employee/client/ViewProgressReportSpecific', clients.ViewProgressR
 router.post('/employee/view/timeLogs', users.ViewTimeLogs);
 router.post('/employee/view/empInfo', users.SearchEmpInfo);
 router.post('/checkUserName', users.checkUserName);
+
+// router.post('/multer', users.UploadFiles);
+router.get('/download', users.DownloadFile);
+router.get('/multer', users.ListFiles);
+// router.get('/SearchFiles', users.SearchFile);
 
 module.exports = router;

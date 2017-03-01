@@ -4,7 +4,9 @@ var moment = require('moment');
 //var favicon = require('serve-favicon');
 
 // var https = require('https');
-// var fs = require('fs');
+var fs = require('fs');
+var assert = require('assert');
+var Grid = require('gridfs-stream');
 var http = require('http');
 
 var logger = require('morgan');
@@ -19,6 +21,7 @@ require('./models/users_model.js'); // ensures that document is registered in Mo
 require('./models/clients_model.js'); // ensures that document is registered in Mongo
 require('./models/progressReports_model.js'); // ensures that document is registered in Mongo
 require('./models/UserTimeLogs.js'); // ensures that document is registered in Mongo
+require('./models/file_model.js'); // ensures that document is registered in Mongo
 
 //var conn = mongoose.connect('mongodb://localhost/changesforhope');
 mongoose.Promise = global.Promise;
@@ -54,7 +57,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(expressSession({
   secret: 'SECRET',
-  cookie: {maxAge: 60*60*1000},
+  // cookie: {maxAge: 60*60*1000},
   resave: true,
   saveUninitialized: true,
   store: new mongoStore({
@@ -72,6 +75,9 @@ app.use(expressSession({
 //     resave: true
 // }));
 
+app.get('/favicon.ico', function(req, res) {
+    res.sendStatus(204);
+});
 
 app.use('/', routes);
 app.use('/users', users);
