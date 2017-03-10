@@ -15,6 +15,7 @@ var multer  = require('multer');
 
 var storage = require('multer-gridfs-storage')({
    url: 'mongodb://admin:admin@ds145329.mlab.com:45329/changesforhope'
+   // url: 'mongodb://localhost/changesforhope'
 });
 
 

@@ -154,11 +154,18 @@
 
               <md-input-container class="md-block">
 
-                <div style="display:inline-block; min-height:290px;">
+                <!-- <div style="display:inline-block; min-height:290px;">
                   
                   <div uib-datepicker ng-model="dt" class="well well-sm" datepicker-options="options"></div>
-                </div>
+                </div> -->
+                <input date-range-picker class="form-control date-picker" type="text" ng-model="SelectedDate" />
+
+
+
               </md-input-container>
+
+              <input type="text" name="startDate" ng-model="formData.startDate" ng-disabled="true" ng-hide="true" />
+              <input type="text" name="endDate" ng-model="formData.endDate" ng-disabled="true" ng-hide="true" />
 
               <!-- <md-dialog-actions layout="row">
                 <md-button ng-click="ShowTimeLogs()" md-autofocus type="submit" ng-show="formData.empUserNameTimeLog != null && formData.empUserNameTimeLog.length > 3">

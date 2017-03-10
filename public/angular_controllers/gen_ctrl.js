@@ -1,5 +1,5 @@
 // JavaScript source code
-var myApp = angular.module('myApp', ['ngFileUpload', 'ngMaterial', , 'md.data.table', 'ngMessages', 'ui.bootstrap', 'ui.bootstrap.datetimepicker']);
+var myApp = angular.module('myApp', ['daterangepicker', 'ngFileUpload', 'ngMaterial', , 'md.data.table', 'ngMessages', 'ui.bootstrap', 'ui.bootstrap.datetimepicker']);
 
 myApp.directive('validPasswordC', function() {
   return {
@@ -420,24 +420,25 @@ myApp.controller('MyCtrl',['$scope', '$http', '$filter',  '$interval', '$mdSiden
 
 		function DialogController($scope, $http, $mdDialog, $filter) {
 
+			 $scope.SelectedDate = {startDate: null, endDate: null};
 
-		var tick = function() {
-		  $scope.clock = Date.now();
-		}
+			var tick = function() {
+			  $scope.clock = Date.now();
+			}
 
-		tick();
+			tick();
 
-		$interval(tick, 1000);
+			$interval(tick, 1000);
 
-		$scope.hide = function() {
-			$mdDialog.hide();
-		};
-		$scope.cancel = function() {
-			$mdDialog.cancel();
-		};
-		$scope.answer = function() {
-			$mdDialog.hide(answer);
-		};
+			$scope.hide = function() {
+				$mdDialog.hide();
+			};
+			$scope.cancel = function() {
+				$mdDialog.cancel();
+			};
+			$scope.answer = function() {
+				$mdDialog.hide(answer);
+			};
 
 
 		$scope.AddProgressReport = function(req, res) {
@@ -468,27 +469,61 @@ myApp.controller('MyCtrl',['$scope', '$http', '$filter',  '$interval', '$mdSiden
 		$scope.ShowTimeLogs = function(req, res) {
 
 			$scope.logs = "";
-			$scope.convertedDateLog = $filter('date')($scope.dt, 'medium');
-			$scope.formData.EmpInfoForDateLog = $scope.convertedDateLog;
-			$scope.NullDate = false;
+			// $scope.convertedDateLog = $filter('date')($scope.dt, 'medium');
+			// $scope.cnvrtdStartDate = $filter('date')($scope.SelectedDate.startDate, 'medium');
+			// $scope.cnvrtdEndDate = $filter('date')($scope.SelectedDate.endDate, 'medium');
 
-			if($scope.formData.EmpInfoForDateLog == null)
-			{
-				$scope.NullDate = true;
+			$scope.cnvrtdStartDate = moment($scope.SelectedDate.startDate);
+			$scope.cnvrtdEndDate = moment($scope.SelectedDate.endDate);
+
+			var res = {
+
+				startDate: $scope.cnvrtdStartDate.format("M/D/YYYY"),
+				endDate: $scope.cnvrtdEndDate.format("M/D/YYYY"),
+			    // exStartTime: e.format("MM/DD/YYYY hh:mm A"),
+			    // exEndTime: f.format("MM/DD/YYYY hh:mm A")
+
+			}
+
+			console.log(res.startDate);
+			console.log(res.endDate);
+
+			$scope.formData.startDate = res.startDate;
+			$scope.formData.endDate = res.endDate;
+
+
+			// console.log($scope.cnvrtdStartDate);
+			// console.log($scope.cnvrtdEndDate);
+
+			// $scope.formData.EmpInfoForDateLog = $scope.convertedDateLog;
+			// $scope.formData.EmpInfoForDateLog = $scope.cnvrtdStartDate;
+			// $scope.NullDate = false;
+
+			// if($scope.formData.EmpInfoForDateLog == null)
+			// {
+			// 	$scope.NullDate = true;
 				
-			}
-			else if($scope.formData.EmpInfoForDateLog != null)
-			{
-				$scope.NullDate = false;
-				$http.post('/employee/view/timeLogs', $scope.formData).success(function(data){
+			// }
+			// else if($scope.formData.EmpInfoForDateLog != null)
+			// {
+			// 	$scope.NullDate = false;
+				$http.post('/employee/view/timeLogs', $scope.formData).success(function(data, err){
 
-					$scope.logs = data;
+					// $scope.logs = data;
+					if(data)
+					{
+						console.log("success");
+						console.log(data);
+					} else {
+						console.log(err);
+					}
+					
 				});
-			}
-			else
-			{
+			// }
+			// else
+			// {
 
-			}
+			// }
 		};
 
 

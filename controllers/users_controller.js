@@ -11,6 +11,7 @@ exports.DownloadFile = function(res, req) {
 
 	console.log("API reached -- Download");
 	var uri = 'mongodb://admin:admin@ds145329.mlab.com:45329/changesforhope';
+	// var uri = 'mongodb://localhost/changesforhope';
 
 	mongodb.MongoClient.connect(uri, function(error, db){
 		assert.ifError(error);
@@ -121,7 +122,7 @@ function admin(req, res) {
 
 	var date = new Date();
 
-	var currentDate = moment(date).format('MMMM Do YYYY');
+	var currentDate = moment(date).format('M/D/YYYY');
 	var currentTime = moment(date).format('h:mm:ss a');
 
 	User.findOne({ username: req.body.username }).exec(function(err, user) {
@@ -136,6 +137,7 @@ function admin(req, res) {
 
 			mongoose.Promise = global.Promise;
 			var db = mongoose.createConnection('mongodb://admin:admin@ds145329.mlab.com:45329/changesforhope');
+			// var db = mongoose.createConnection('mongodb://localhost/changesforhope');
 
 			db.collection('users').insert({
 
@@ -190,7 +192,7 @@ var user = function(req, res) {
 
 	var date = new Date();
 
-	var currentDate = moment(date).format('MMMM Do YYYY');
+	var currentDate = moment(date).format('M/D/YYYY');
 	var currentTime = moment(date).format('h:mm:ss a');
 	console.log(currentDate);
 	console.log(currentTime);
@@ -206,6 +208,7 @@ var user = function(req, res) {
 
 			mongoose.Promise = global.Promise;
 			var db = mongoose.createConnection('mongodb://admin:admin@ds145329.mlab.com:45329/changesforhope');
+			// var db = mongoose.createConnection('mongodb://localhost/changesforhope');
 
 			db.collection('users').insert({
 
@@ -275,7 +278,7 @@ exports.logoutUser = function(req, res) {
 	var date = new Date();
 
 	// var currentDate = moment(date).format('MMMM Do YYYY, h:mm:ss a');
-	var currentDate = moment(date).format('MMMM Do YYYY');
+	var currentDate = moment(date).format('M/D/YYYY');
 	var currentTime = moment(date).format('h:mm:ss a');
 	console.log(currentDate);
 	console.log(currentTime);
@@ -288,6 +291,7 @@ exports.logoutUser = function(req, res) {
 			
 			mongoose.Promise = global.Promise;
 			var db = mongoose.createConnection('mongodb://admin:admin@ds145329.mlab.com:45329/changesforhope');
+			// var db = mongoose.createConnection('mongodb://localhost/changesforhope');
 			db.collection('users').update(
 			{
 
@@ -378,24 +382,88 @@ exports.deleteUser = function(req, res) {
 
 exports.ViewTimeLogs = function(req, res) {
 
-	var str = req.body.EmpInfoForDateLog;
-	var response = str.substring(0,12);
-	console.log(response);
+	var startDate = req.body.startDate;
+	var endDate = req.body.endDate;
+	// var response = str.substring(0,12);
+	// console.log(str);
+	
+	// console.log(startDate);
+	// console.log(endDate);
 
-	var currentDate = moment(response).format('MMMM Do YYYY');
+	var start = new Date(startDate);
+	var end = new Date(endDate);
+	var current = new Date(start);
+	
+	var between = [];
+
+	while(current <= end) {
+	    // day = date1.getDate()
+	    // date1 = new Date(date1.setDate(--day));  
+	    between.push(new Date(current).toLocaleDateString());
+	    current.setDate(current.getDate() + 1)
+	}
+	// console.log(start);
+	// console.log(end);
+	// console.log(between);
+
+	
+	var timelogs = [];
+	
+	for(i = 0; i < between.length; i++)	{
+
+		User.find({ CurrentDate: {$in: [between[i]] } }).exec(function(err, timelog) {
+		//User.find({ CurrentDate: {$elemMatch: {CurrentDate: '3/8/2017'} } }).exec(function(err, timelog) {
+
+
+		for(x = 0; x < timelog.length; x++) {
+			//console.log(timelog[x]);
+			timelogs.push(timelog[x]);
+			res.contentType('application/json');
+			res.send(JSON.stringify(timelogs));
+		}
+
+		
+
+
+		});
+
+		//res.json(timelogs);
+	};
+	
+	
+		
+	// for(i = 0; i < between.length; i++)	{
+		
+	// 	User.find({ CurrentDate: between[i] }).exec(function(err, data) {
+
+			
+			
+	// 		if(i < between.length) {
+	// 			timelogs.push(data);
+	// 		} else {
+	// 			res.json(timelogs);
+	// 		}
+
+	// 		//res.json(timelogs);
+			
+	// 		// if(err) {
+	// 		// 	console.log(err);
+	// 		// } else {
+	// 		// 	//res.json(timelog);
+	// 		// 	timelogs.push(data);
+	// 		// }
+	// 	});
+		
+		
+	// }
+	
+
+	
 	
 	// User.find({username: "user", email: "user", CurrentDate: currentDate }).exec(function(err, user) {
 	// User.find({username: req.body.empUserNameTimeLog , CurrentDate: currentDate }).exec(function(err, user) {
-	User.find({ $or: [{ username: req.body.empUserNameTimeLog }, { email: req.body.empEmailTimeLog }] , CurrentDate: currentDate }).exec(function(err, user) {
-
-		if(err) {
-			console.log(err);
-		} else {
-			res.json(user);
-			console.log(user);
-		}
-
-	});
+	// User.find({ $or: [{ username: req.body.empUserNameTimeLog }, { email: req.body.empEmailTimeLog }] , CurrentDate: currentDate }).exec(function(err, user) {
+	
 
 };
 

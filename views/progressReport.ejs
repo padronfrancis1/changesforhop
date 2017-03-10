@@ -83,7 +83,9 @@
               <div class="form-container" style="overflow-x: scroll;">
 
                 <ul>
-                  <li ng-repeat="info in clients| filter:nameText" style="margin-left:-30px;"><p>Full Name : {{ info.FirstName }} {{ info.MiddleName }} {{ info.LastName }}</p></li>
+                  <li ng-repeat="info in clients| filter:nameText" style="margin-left:-30px;"
+                  ng-click="goToPerson(info.FirstName, info.MiddleName, info.LastName)"
+                  ><p>Full Name : {{ info.FirstName }} {{ info.MiddleName }} {{ info.LastName }}</p></li>
                 </ul>
                 <div ng-show="!(clients| filter:nameText).length">No Clients Found</div>
 
@@ -111,9 +113,11 @@
                   <form name="SearchEmpInfoForm">
                     <div class="row">
 
-                      <div class="col-md-12">
+                      <!-- <div class="col-md-12"> -->
 
-                          <div class="col-md-5" style="border: 0px solid #333;padding: 3% 3%;">
+                          <md-content ng-hide="true">
+
+                          <div class="col-md-12" style="border: 0px solid #333;padding: 3% 3%;">
 
                             <md-card>
 
@@ -174,8 +178,10 @@
 
                           </div>
 
+                          </md-content>
 
-                          <div class="col-md-7" style="border: 0px solid #333;padding: 3% 3%;">
+
+                          <div class="col-md-12" style="border: 0px solid #333;padding: 3% 3%;">
                             <md-card>
 
                               <md-toolbar class="md-theme-indigo">
@@ -277,14 +283,14 @@
                           Show All Clients
                           </md-button> -->
 
-                      </div>
+                      <!-- </div> -->
 
                       
                     </div>
 
                     <div class="row">
-                      <div class="col-md-12">
-                        <div class="col-md-5" style="border: 0px solid #333;padding: 3% 3%;">
+                      <!-- <div class="col-md-12"> -->
+                        <div class="col-md-12" style="border: 0px solid #333;">
                           <md-card>
 
                             <md-toolbar class="md-theme-indigo">
@@ -293,7 +299,7 @@
 
                             <md-card-content>
 
-                              <table id="ProgressReportTable">
+                              <table id="ProgressReportTable" style="border: 0px solid red;width: 100%;">
 
                                 <tr>
                                   <td>
@@ -324,11 +330,19 @@
                                   <td>
                                     <md-input-container class="md-block">
                                       <input type="text"
+                                      required minlength="2" maxlength="100"
+                                      aria-label="Hygiene"
                                       id="progressReport_hygiene" 
                                       name="progressReport_hygiene" 
-                                      placeholder="Hygiene" 
                                       ng-model="formData.progressReport_hygiene">
                                     </md-input-container>
+
+                                    <div ng-messages="SearchEmpInfoForm.progressReport_hygiene.$error" role="alert">
+                                    <div ng-message-exp="['required', 'minlength', 'maxlength']" style="color: red;font-size: 12px;">
+                                      Input must be between 2 and 100 characters long.
+                                    </div>
+                                  </div>
+
                                   </td>
                                 </tr>
 
@@ -339,11 +353,18 @@
                                   <td>
                                     <md-input-container class="md-block">
                                       <input type="text"
+                                      required minlength="2" maxlength="100"
+                                      aria-label="Hleath/Medication"
                                       id="progressReport_healthmed" 
                                       name="progressReport_healthmed" 
-                                      placeholder="Health/ Medication" 
                                       ng-model="formData.progressReport_healthmed">
                                     </md-input-container>
+
+                                    <div ng-messages="SearchEmpInfoForm.progressReport_healthmed.$error" role="alert">
+                                    <div ng-message-exp="['required', 'minlength', 'maxlength']" style="color: red;font-size: 12px;">
+                                      Input must be between 2 and 100 characters long.
+                                    </div>
+                                  </div>
                                     
                                   </td>
                                 </tr>
@@ -355,11 +376,18 @@
                                   <td>
                                     <md-input-container class="md-block">
                                       <input type="text"
-                                      id="progressReport_nutrition" 
+                                      required minlength="2" maxlength="100"
+                                      id="progressReport_nutrition"
+                                      aria-label="Nutrition"
                                       name="progressReport_nutrition" 
-                                      placeholder="Nutrition" 
                                       ng-model="formData.progressReport_nutrition">
                                     </md-input-container>
+
+                                    <div ng-messages="SearchEmpInfoForm.progressReport_nutrition.$error" role="alert">
+                                    <div ng-message-exp="['required', 'minlength', 'maxlength']" style="color: red;font-size: 12px;">
+                                      Input must be between 2 and 100 characters long.
+                                    </div>
+                                  </div>
 
                                   </td>
                                 </tr>
@@ -371,11 +399,19 @@
                                   <td>
                                     <md-input-container class="md-block">
                                     <input type="text"
+                                    aria-label="Appointments"
+                                    required minlength="2" maxlength="100"
                                     id="progressReport_appointments" 
                                     name="progressReport_appointments" 
-                                    placeholder="Appointments" 
                                     ng-model="formData.progressReport_appoitnments">
                                     </md-input-container>
+
+                                    <div ng-messages="SearchEmpInfoForm.progressReport_appointments.$error" role="alert">
+                                    <div ng-message-exp="['required', 'minlength', 'maxlength']" style="color: red;font-size: 12px;">
+                                      Input must be between 2 and 100 characters long.
+                                    </div>
+                                  </div>
+
                                   </td>
                                 </tr>
 
@@ -386,11 +422,18 @@
                                   <td>
                                     <md-input-container class="md-block">
                                       <input type="text"
-                                      id="progressReport_schoolhw" 
+                                      required minlength="2" maxlength="100"
+                                      aria-label="School/ Homework"
+                                      id="progressReport_schoolhw"
                                       name="progressReport_schoolhw" 
-                                      placeholder="School/ Homework" 
                                       ng-model="formData.progressReport_schoolhw">
                                     </md-input-container>
+
+                                    <div ng-messages="SearchEmpInfoForm.progressReport_schoolhw.$error" role="alert">
+                                    <div ng-message-exp="['required', 'minlength', 'maxlength']" style="color: red;font-size: 12px;">
+                                      Input must be between 2 and 100 characters long.
+                                    </div>
+                                  </div>
                                   </td>
                                 </tr>
 
@@ -401,11 +444,18 @@
                                   <td>
                                     <md-input-container class="md-block">
                                       <input type="text"
-                                      id="progressReport_rel" 
-                                      name="progressReport_rel" 
-                                      placeholder="Relationships" 
+                                      required minlength="2" maxlength="100"
+                                      id="progressReport_rel"
+                                      name="progressReport_rel"
+                                      aria-label="Relationships"
                                       ng-model="formData.progressReport_rel">
                                     </md-input-container>
+
+                                    <div ng-messages="SearchEmpInfoForm.progressReport_rel.$error" role="alert">
+                                    <div ng-message-exp="['required', 'minlength', 'maxlength']" style="color: red;font-size: 12px;">
+                                      Input must be between 2 and 100 characters long.
+                                    </div>
+                                  </div>
 
                                   </td>
                                 </tr>
@@ -417,11 +467,18 @@
                                   <td>
                                     <md-input-container class="md-block">
                                       <input type="text"
+                                      required minlength="2" maxlength="100"
+                                      aria-label="AWOL Contact"
                                       id="progressReport_contact" 
                                       name="progressReport_contact" 
-                                      placeholder="AWOL Contact" 
                                       ng-model="formData.progressReport_contact">
                                     </md-input-container>
+
+                                    <div ng-messages="SearchEmpInfoForm.progressReport_contact.$error" role="alert">
+                                    <div ng-message-exp="['required', 'minlength', 'maxlength']" style="color: red;font-size: 12px;">
+                                      Input must be between 2 and 100 characters long.
+                                    </div>
+                                  </div>
                                   </td>
                                 </tr>
 
@@ -432,11 +489,18 @@
                                   <td>
                                     <md-input-container class="md-block">
                                       <input type="text"
+                                      required minlength="2" maxlength="100"
+                                      aria-label="Progress in Goals"
                                       id="progressReport_progressgoals" 
                                       name="progressReport_progressgoals" 
-                                      placeholder="Progress in Goals" 
                                       ng-model="formData.progressReport_progressgoals">
                                     </md-input-container>
+
+                                    <div ng-messages="SearchEmpInfoForm.progressReport_progressgoals.$error" role="alert">
+                                    <div ng-message-exp="['required', 'minlength', 'maxlength']" style="color: red;font-size: 12px;">
+                                      Input must be between 2 and 100 characters long.
+                                    </div>
+                                  </div>
                                   </td>
                                 </tr>
 
@@ -444,7 +508,7 @@
 
                               <md-dialog-actions layout="row">
                                 <md-button 
-                                ng-click="AddProgressReport()" 
+                                ng-click="AddProgressReport()"
                                 md-autofocus type="submit" 
                                 ng-show="info._id.length > 0">
                                   Add Progress Report
@@ -456,7 +520,7 @@
                           </md-card>
                         </div>
 
-                        <div class="col-md-7" style="border: 0px solid #333;padding: 3% 3%;" ng-show="info._id.length > 0">
+                        <div class="col-md-12" style="border: 0px solid #333;padding: 3% 3%;" ng-show="info._id.length > 0">
 
                           <md-card>
 
@@ -526,7 +590,7 @@
                             </md-card>
                         </div>
 
-                      </div>
+                      <!-- </div> -->
                     </div>
 
                     <div class="row">
@@ -614,9 +678,17 @@
     <script src="/js/bootstrap-ui-datetime-picker/dist/datetime-picker.js"></script>
 
     <script src="/js/angular-messages/angular-messages.js"></script>
-    <script src="/js/angular-material-data-table/dist/md-data-table.js"></script>
 
+    <script src="/js/angular-material-data-table/dist/md-data-table.js"></script>
     <script src="/js/ng-file-upload/ng-file-upload.js"></script>
+
+    <!--dateRangPicker-->
+    <script src="/js/moment/moment.js"></script>
+    <script src="/js/bootstrap-daterangepicker/daterangepicker.js"></script>
+    <script src="/js/angular-daterangepicker/js/angular-daterangepicker.js"></script>
+
+    <link rel="stylesheet" href="/css/bootstrap-daterangepicker/daterangepicker.css"/>
+
 
     <script src="/angular_controllers/gen_ctrl.js"></script>
 
