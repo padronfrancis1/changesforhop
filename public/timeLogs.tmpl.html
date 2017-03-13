@@ -104,38 +104,23 @@
 
             <form name="EmpInfoForm">
 
-              <md-input-container class="md-block">
+              <!-- <md-input-container class="md-block">
                 <label>Employee Username</label>
-                <!-- <input required type="email" name="empEmailTimeLog" ng-model="formData.empEmailTimeLog"
-                       minlength="10" maxlength="100" ng-pattern="/^.+@.+\..+$/" /> -->
 
                 <input type="text" name="empUserNameTimeLog" ng-model="formData.empUserNameTimeLog" />
 
-                <!-- <div ng-messages="EmpInfoForm.empUserNameTimeLog.$error" role="alert">
-                  <div ng-message-exp="['required', 'minlength', 'maxlength']">
-                    Your username must be between 2 and 100 characters long.
-                  </div>
-                </div> -->
 
               </md-input-container>
 
-              <p>Or</p>
+              <p>Or</p> -->
 
               <md-input-container class="md-block">
                 <label>Employee Email</label>
-                <!-- <input required type="email" name="empEmailTimeLog" ng-model="formData.empEmailTimeLog"
-                       minlength="10" maxlength="100" ng-pattern="/^.+@.+\..+$/" /> -->
 
                 <input type="text" name="empEmailTimeLog" ng-model="formData.empEmailTimeLog" />
 
 
               </md-input-container>
-
-              <!-- <input required type="text" class="form-control" 
-              id="EmpInfoForDateLog" 
-              name="EmpInfoForDateLog" 
-              placeholder="View Time Log on: " 
-              ng-model="formData.EmpInfoForDateLog" /> -->
 
               <md-input-container class="md-block">
 
@@ -154,34 +139,25 @@
 
               <md-input-container class="md-block">
 
-                <!-- <div style="display:inline-block; min-height:290px;">
-                  
-                  <div uib-datepicker ng-model="dt" class="well well-sm" datepicker-options="options"></div>
-                </div> -->
                 <input date-range-picker class="form-control date-picker" type="text" ng-model="SelectedDate" />
-
-
 
               </md-input-container>
 
-              <input type="text" name="startDate" ng-model="formData.startDate" ng-disabled="true" ng-hide="true" />
-              <input type="text" name="endDate" ng-model="formData.endDate" ng-disabled="true" ng-hide="true" />
+              <md-input-container>
+                <input type="text" name="startDate" ng-model="formData.startDate" ng-disabled="true" ng-hide="true" />
+              </md-input-container>
 
-              <!-- <md-dialog-actions layout="row">
-                <md-button ng-click="ShowTimeLogs()" md-autofocus type="submit" ng-show="formData.empUserNameTimeLog != null && formData.empUserNameTimeLog.length > 3">
-                  Search Employee Log
-                </md-button>
-              </md-dialog-actions> -->
-
-              <md-dialog-actions layout="row">
-                <md-button ng-click="ShowTimeLogs()" md-autofocus type="submit">
-                  Search Employee Log
-                </md-button>
-              </md-dialog-actions>
+              <md-input-container>
+                <input type="text" name="endDate" ng-model="formData.endDate" ng-disabled="true" ng-hide="true" />
+              </md-input-container>
 
             </form>
 
-
+            <md-dialog-actions layout="row">
+              <md-button ng-click="ShowTimeLogs()" md-autofocus type="submit">
+                Search Employee Log
+              </md-button>
+            </md-dialog-actions>
 
             <md-table-container>
 
@@ -193,7 +169,7 @@
                   </div>
                 </md-toolbar>
 
-                <h4>{{ logs[0].CurrentDate }}</h4>
+                
 
                 <div ng-repeat="info in logs" style="padding-left: 3%;">
 
@@ -211,6 +187,10 @@
                     
                     <tbody md-body>
                       
+                        <tr md-row>
+                            <td md-cell><h4>{{ info.CurrentDate }}</h4>
+                        </tr>
+
                         <tr md-row>
                           <td md-cell>{{ info.TimeOut }}</td>
                         </tr>

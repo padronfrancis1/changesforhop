@@ -18,9 +18,9 @@
 
     <link rel="stylesheet" type="text/css" href="/css/style.css">
 
-    <style type="text/css">
+<!--     <style type="text/css">
       md-backdrop.md-sidenav-backdrop{
-          display:none
+          display:none;
       }
       .listdemoListControls md-divider {
         margin-top: 0;
@@ -41,7 +41,7 @@
         /* IE 10+ */
         user-select: none;
         /* Likely future */ }
-    </style>
+    </style> -->
 
 
 
@@ -57,13 +57,11 @@
 
   <%- include partials/nav.ejs %>
 
+
+
     <!-- <section ng-controller="MyCtrl" style="border: 0px solid #333; margin-top: 200px;"> -->
     <section ng-controller="MyCtrl" style="border: 0px solid #333; margin-top: 50px;">
-      <div class="row">
-        <md-button ng-click="toggleLeft()" class="md-raised">
-          Show All Clients
-        </md-button>
-      </div>
+
       <div class="container">
 
 
@@ -78,9 +76,10 @@
 
             <md-content layout-margin="">
 
-              <md-button ng-click="toggleLeft()" class="md-accent">
-              Close Window
+              <md-button ng-click="toggleLeft()" class="md-raised md-warn">
+                Close Window
               </md-button>
+
               <h2>Search Client</h2>
               <input type="text" ng-model="nameText">
 
@@ -88,22 +87,16 @@
 
               <div class="form-container" style="overflow-x: scroll;">
               
-
+                  <h4>Number of Clients: {{clients.length}}</h4>
+                  <hr>
                   <ul ng-repeat="person in clients| filter:nameText" ng-click="goToPerson(person.FirstName, person.MiddleName,person.LastName)">
-                    <li>
+                    <li style="margin-left:-30px;">
                     {{ person.FirstName }}
                     {{ person.MiddleName }}
                     {{ person.LastName }}
                     </li>
 
                   </lu>
-
-
-                <!-- <ul>
-                  <li ng-repeat="info in clients| filter:nameText" style="margin-left:-30px;"><p>Full Name : {{ info.FirstName }} {{ info.MiddleName }} {{ info.LastName }}</p></li>
-                </ul>
-                <div ng-show="!(clients| filter:nameText).length">No Clients Found</div> -->
-
 
               </div>
 
@@ -113,7 +106,18 @@
 
           </md-sidenav>
 
-          <div class="col-md-12" ng-hide="true" style="margin-right: 800px;">
+
+
+      <div class="container"  style="width: 70%; margin: 50px auto;">
+        <div class="row">
+
+          <div class="col-md-12">
+            <md-button ng-click="toggleLeft()" class="md-raised">
+              Show All Clients
+            </md-button>
+          </div>
+
+          <div class="col-md-12" ng-hide="true">
             <md-card>
               <md-toolbar class="md-theme-indigo">
                 <h1 class="md-toolbar-tools">Search Client</h1>
@@ -189,13 +193,9 @@
               </md-card-content>
 
             </md-card>
-
-
-
           </div>
 
-
-          <div class="col-md-12" style="width: 50%; margin-left: 300px;">
+          <div class="col-md-12">
             <form name="SeachClientInfoForm2">
 
             <md-card>
@@ -477,15 +477,17 @@
 
                     </table>
 
-                <input type="checkbox" ng-model="confirmed" ng-change="change()" id="ng-change-example1" /> Copy Records
+                <!-- <input type="checkbox" ng-model="confirmed" ng-change="change()" id="ng-change-example1" /> Copy Records -->
+
+                <md-button class="md-raised md-primary" ng-model="confirmed" ng-click="change()">Copy Records</md-button>
 
                 <p ng-show="formData.fnameu.length == 0 &&
                   formData.lnameu.length == 0 && 
                   formData.mnameu.length == 0" style="color: red;"> Please Copy the information first before you can edit</p>
 
-
                 <md-dialog-actions layout="row">
                   <md-button 
+                  class="md-raised md-primary"
                   ng-click="UpdateClient()" 
                   md-autofocus type="submit" 
                   ng-show="
@@ -496,7 +498,9 @@
                     Update Info
                   </md-button>
                 </md-dialog-actions>
-                <p ng-show="formDataUpdate.length > 0" style="color: blue;"> Updated Record, Plese Search client again</p>
+
+                <!-- <p ng-show="!updateStatus = false" style="color: blue;"> Updated Record</p> -->
+                <p ng-show="updateStatus" style="color: blue;"> Updated Records</p>
 
               </md-card-content>
 
@@ -506,6 +510,9 @@
 
             </form>
           </div> 
+
+        </div>
+      </div>
 
 
 

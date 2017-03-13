@@ -46,6 +46,20 @@ myApp.controller('MyCtrl',['$scope', '$http', '$filter',  '$interval', '$mdSiden
 
 
 
+		$scope.reloadRoute = function() {
+		   $route.reload();
+		}
+
+		
+		// side nav
+		$scope.toggleLeft = buildToggler('left');
+		$scope.toggleRight = buildToggler('right');
+
+		function buildToggler(componentId) {
+			return function() {
+				$mdSidenav(componentId).toggle();
+			};
+		}
 
 
 		$scope.uploadFile = function(){
@@ -170,10 +184,23 @@ myApp.controller('MyCtrl',['$scope', '$http', '$filter',  '$interval', '$mdSiden
 
 		$interval(tick, 1000);
 
+		// $http.get('/client/source').then(function(response){
+
+		// 	$scope.clients = response.data;
+		// });
 		$http.get('/client/source').then(function(response){
 
 			$scope.clients = response.data;
+
 		});
+
+		$scope.AllClientsNav = function() {
+			$http.get('/client/source').then(function(response){
+
+				$scope.clients = response.data;
+
+			});
+		}
 
 		$scope.uploadPic = function(file) {
 		    file.upload = Upload.upload({
@@ -231,7 +258,7 @@ myApp.controller('MyCtrl',['$scope', '$http', '$filter',  '$interval', '$mdSiden
 
 
 		// $scope.userExist = false;
-		$scope.userExist = "";
+		$scope.userExist = true;
 		$scope.checkUserName = function(req, res) {
 			$scope.userExist = "";
 
@@ -239,8 +266,13 @@ myApp.controller('MyCtrl',['$scope', '$http', '$filter',  '$interval', '$mdSiden
 
 			$http.post('/checkUserName', $scope.formData).success(function(data){
 
+				if(data) {
+					$scope.userExist = true;
+				} else {
+					$scope.userExist = false;
+				}
 				
-				$scope.userExist = data;
+				//$scope.userExist = data;
 
 			});
 		}
@@ -258,6 +290,7 @@ myApp.controller('MyCtrl',['$scope', '$http', '$filter',  '$interval', '$mdSiden
 		$scope.prefill = [{fnames: "prefill"}];
 		
 		$scope.goToPerson = function(fname, mname, lname) {
+			$scope.updateStatus = false;
 			$scope.formData = {}
 			$scope.formData.fnames = fname;
 			$scope.formData.mnames = mname;
@@ -270,6 +303,35 @@ myApp.controller('MyCtrl',['$scope', '$http', '$filter',  '$interval', '$mdSiden
 
 			});
 		}
+
+		$scope.ViewProgressReport = function(req, res) {
+
+			$scope.convertedMonthlyReport = $filter('date')($scope.dt, 'medium'); // for conversion to string
+			$scope.formData.progressMonthlyReport = $scope.convertedMonthlyReport;
+
+			$http.post('/employee/client/ViewProgressReport', $scope.formData).success(function(data){
+					console.log(data);
+					$scope.progressReport = data;
+				});
+		}
+		$scope.ViewProgressReportSpecific = function(date) {
+
+			// $scope.formData = {};
+			$scope.formData.progressReport_SpecificDate = date;
+			console.log($scope.formData.progressReport_SpecificDate);
+
+			$http.post('/employee/client/ViewProgressReportSpecific', $scope.formData).success(function(data){
+				$scope.progressReportSpecific = data;
+			});
+		}
+
+		// $scope.ViewProgressReportSpecific = function(req, res) {
+
+		// 	$http.post('/employee/client/ViewProgressReportSpecific', $scope.formData).success(function(data){
+		// 		console.log(data);
+		// 		$scope.progressReportSpecific = data;
+		// 	});
+		// }
 
 
 		$scope.getClientInfo = function(req, res) {
@@ -294,12 +356,21 @@ myApp.controller('MyCtrl',['$scope', '$http', '$filter',  '$interval', '$mdSiden
 
 		
 
+		$scope.updateStatus = false;
 		$scope.UpdateClient = function(req, res) {
 
 			$http.post('/client/update', $scope.formData).success(function(updateCleintdata){
 
 				console.log(updateCleintdata);
-				$scope.formDataUpdate = updateCleintdata;
+				if(updateCleintdata) {
+					$scope.formDataUpdate = updateCleintdata;
+					
+					$scope.updateStatus = true;
+					$scope.AllClientsNav();
+				} else {
+					$scope.updateStatus = false;
+				}
+				
 
 			});
 		}
@@ -325,34 +396,6 @@ myApp.controller('MyCtrl',['$scope', '$http', '$filter',  '$interval', '$mdSiden
 				
 
 			});
-		}
-
-		$scope.ViewProgressReport = function(req, res) {
-
-			$scope.convertedMonthlyReport = $filter('date')($scope.dt, 'medium'); // for conversion to string
-			$scope.formData.progressMonthlyReport = $scope.convertedMonthlyReport;
-
-			$http.post('/employee/client/ViewProgressReport', $scope.formData).success(function(data){
-					console.log(data);
-					$scope.progressReport = data;
-				});
-			}
-
-			$scope.ViewProgressReportSpecific = function(req, res) {
-
-			$http.post('/employee/client/ViewProgressReportSpecific', $scope.formData).success(function(data){
-				console.log(data);
-				$scope.progressReportSpecific = data;
-			});
-		}
-
-		$scope.toggleLeft = buildToggler('left');
-		$scope.toggleRight = buildToggler('right');
-
-		function buildToggler(componentId) {
-			return function() {
-				$mdSidenav(componentId).toggle();
-			};
 		}
 
 
@@ -420,7 +463,8 @@ myApp.controller('MyCtrl',['$scope', '$http', '$filter',  '$interval', '$mdSiden
 
 		function DialogController($scope, $http, $mdDialog, $filter) {
 
-			 $scope.SelectedDate = {startDate: null, endDate: null};
+			
+			$scope.SelectedDate = {startDate: null, endDate: null};
 
 			var tick = function() {
 			  $scope.clock = Date.now();
@@ -478,8 +522,8 @@ myApp.controller('MyCtrl',['$scope', '$http', '$filter',  '$interval', '$mdSiden
 
 			var res = {
 
-				startDate: $scope.cnvrtdStartDate.format("M/D/YYYY"),
-				endDate: $scope.cnvrtdEndDate.format("M/D/YYYY"),
+				startDate: $scope.cnvrtdStartDate.format("M"),
+				endDate: $scope.cnvrtdEndDate.format("YYYY"),
 			    // exStartTime: e.format("MM/DD/YYYY hh:mm A"),
 			    // exEndTime: f.format("MM/DD/YYYY hh:mm A")
 
@@ -509,7 +553,7 @@ myApp.controller('MyCtrl',['$scope', '$http', '$filter',  '$interval', '$mdSiden
 			// 	$scope.NullDate = false;
 				$http.post('/employee/view/timeLogs', $scope.formData).success(function(data, err){
 
-					// $scope.logs = data;
+					$scope.logs = data;
 					if(data)
 					{
 						console.log("success");

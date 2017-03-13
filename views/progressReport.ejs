@@ -13,7 +13,10 @@
 
     <link rel="stylesheet" href="/css/bootstrap.min.css" crossorigin="anonymous">
 
-     <!-- AngularJS Material CSS now available via Google CDN; version 1.0.7 used here -->
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    
+    <!-- AngularJS Material CSS now available via Google CDN; version 1.0.7 used here -->
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/0.11.2/angular-material.min.css">
 
     <link rel="stylesheet" type="text/css" href="/css/style.css">
@@ -25,17 +28,17 @@
     </style>
 
     <style>
-  .full button span {
-    background-color: limegreen;
-    border-radius: 32px;
-    color: black;
-  }
-  .partially button span {
-    background-color: orange;
-    border-radius: 32px;
-    color: black;
-  }
-</style>
+      .full button span {
+        background-color: limegreen;
+        border-radius: 32px;
+        color: black;
+      }
+      .partially button span {
+        background-color: orange;
+        border-radius: 32px;
+        color: black;
+      }
+    </style>
 
 
 
@@ -56,488 +59,269 @@
 
   <div layout="column" layout-fill>
 
-    <md-content>
-
-      <div layout="column" ng-cloak="" class="sidenavdemoCustomSidenav" ng-app="MyApp" style="border: 0px solid red;">
-
-        <section layout="row">
-
-          <md-sidenav class="md-sidenav-left" md-component-id="left" md-disable-backdrop="" md-whiteframe="4" style="border: 0px solid #333;position: fixed;" >
-
-            <md-toolbar class="md-theme-indigo"  flex="none">
-              <h1 class="md-toolbar-tools">Clients List</h1>
-            </md-toolbar>
 
 
-            <md-content layout-margin="">
-              <!-- <p>
-              This sidenav is not showing any backdrop, where users can click on it, to close the sidenav.
-              </p> -->
-              <md-button ng-click="toggleLeft()" class="md-accent">
-              Close Window
-              </md-button>
-              <h2>Search Client</h2>
-              <input type="text" ng-model="nameText">
+    <div layout="column" ng-cloak="" class="sidenavdemoCustomSidenav" ng-app="MyApp" style="border: 0px solid red;">
 
-              <h3>All Cients List</h3>
-              <div class="form-container" style="overflow-x: scroll;">
+      <section layout="row">
 
-                <ul>
-                  <li ng-repeat="info in clients| filter:nameText" style="margin-left:-30px;"
-                  ng-click="goToPerson(info.FirstName, info.MiddleName, info.LastName)"
-                  ><p>Full Name : {{ info.FirstName }} {{ info.MiddleName }} {{ info.LastName }}</p></li>
-                </ul>
-                <div ng-show="!(clients| filter:nameText).length">No Clients Found</div>
+        <md-sidenav class="md-sidenav-left" md-component-id="left" md-disable-backdrop="" md-whiteframe="4" style="border: 0px solid #333;position: fixed;" >
 
+          <md-toolbar class="md-theme-indigo"  flex="none">
+            <h1 class="md-toolbar-tools">Clients List</h1>
+          </md-toolbar>
+
+
+          <md-content layout-margin="">
+            <!-- <p>
+            This sidenav is not showing any backdrop, where users can click on it, to close the sidenav.
+            </p> -->
+            <md-button ng-click="toggleLeft()" class="md-accent">
+            Close Window
+            </md-button>
+            <h2>Search Client</h2>
+            <input type="text" ng-model="nameText">
+
+            <h3>All Cients List</h3>
+            <div class="form-container" style="overflow-x: scroll;">
+            <h4>Number of Clients: {{clients.length}}</h4>
+              <ul>
+
+                <li ng-repeat="info in clients| filter:nameText" style="margin-left:-30px;"
+                ng-click="goToPerson(info.FirstName, info.MiddleName, info.LastName)"
+                ><p>Full Name : {{ info.FirstName }} {{ info.MiddleName }} {{ info.LastName }}</p></li>
+              </ul>
+              <div ng-show="!(clients| filter:nameText).length">No Clients Found</div>
+
+            </div>
+
+            
+
+          </md-content>
+
+        </md-sidenav>
+
+
+
+        <div class="row">
+
+
+
+
+
+          <div class="container">
+
+            <md-button ng-click="toggleLeft()" class="md-raised">
+              Show All Clients
+            </md-button>
+            
+              <div class="row">
+
+                <!-- <div class="col-md-12"> -->
+
+                <md-content ng-hide="true">
+
+                <div class="col-md-12" style="border: 0px solid #333;padding: 3% 3%;">
+
+                  <md-card>
+
+                    <md-toolbar class="md-theme-indigo">
+                      <h1 class="md-toolbar-tools">Search Clients</h1>
+                    </md-toolbar>
+
+                    <md-card-content>
+
+                      <md-input-container class="md-block">
+                        <label for="fnames">First Name:</label>
+                        <input required type="text" name="fnames" ng-model="formData.fnames" minlength="2" maxlength="100" />
+
+                        <div ng-messages="SearchEmpInfoForm.fnames.$error" role="alert">
+                          <div ng-message-exp="['required', 'minlength', 'maxlength', 'pattern']">
+                            Input must be between 2 and 100 characters long.
+                          </div>
+                        </div>
+                      </md-input-container>
+
+                      <md-input-container class="md-block">
+                        <label for="mnames">Middle Name:</label>
+                        <input required type="text" name="mnames" ng-model="formData.mnames" minlength="" maxlength="100" />
+
+                        <div ng-messages="SearchEmpInfoForm.mnames.$error" role="alert">
+                          <div ng-message-exp="['required', 'minlength', 'maxlength', 'pattern']">
+                            Input must be between 1 and 100 characters long.
+                          </div>
+                        </div>
+                      </md-input-container>
+
+                      <md-input-container class="md-block">
+                        <label for="lnames">Last Name:</label>
+                        <input required type="text" name="lnames" ng-model="formData.lnames" minlength="" maxlength="100" />
+
+                        <div ng-messages="SearchEmpInfoForm.mnames.$error" role="alert">
+                          <div ng-message-exp="['required', 'minlength', 'maxlength', 'pattern']">
+                            Input must be between 1 and 100 characters long.
+                          </div>
+                        </div>
+                      </md-input-container>
+
+                      <p style="color: red;" ng-show="info.FirstName == null">There were no records found</p>
+
+
+                      <md-dialog-actions layout="row">
+                        <md-button 
+                        ng-click="getClientInfo()" 
+                        md-autofocus type="submit" 
+                        ng-show="formData.fnames != null && formData.fnames.length > 0 && formData.mnames != null && formData.mnames.length > 0 && formData.lnames != null && formData.lnames.length > 0">
+                          Search Employee Records
+                        </md-button>
+                      </md-dialog-actions>
+
+                    </md-card-content>
+
+                  </md-card>
+
+                </div>
+
+                </md-content>
+
+
+                <div class="col-md-12" style="border: 0px solid #333;padding: 3% 3%;">
+                  <md-card>
+
+                    <md-toolbar class="md-theme-indigo">
+                      <h1 class="md-toolbar-tools">Search Results</h1>
+                    </md-toolbar>
+
+                    <md-card-content>
+
+                      <table id="updateTable">
+
+                        <tr>
+                          <td>
+                            <h4>First Name: </h4>
+                          </td>
+                          <td>
+                            <input type="text" class="form-control" 
+                            id="formDataUpdate_infoFirstUpdate" 
+                            name="infoFirstUpdate" 
+                            placeholder="Current First Name" 
+                            ng-model="info.FirstName" disabled="true">
+                          </td>
+                        </tr>
+
+                        <tr>
+                          <td>
+                            <h4>Middle Name: </h4>
+                          </td>
+                          <td>
+                            <input type="text" class="form-control" 
+                            id="formDataUpdate_infoMiddleUpdate" 
+                            name="infoMiddleUpdate" 
+                            placeholder="Current Middle Name" 
+                            ng-model="info.MiddleName" disabled="true">
+                          </td>
+                        </tr>
+
+
+                        <tr>
+                          <td>
+                            <h4>Last Name: </h4>
+                          </td>
+                          <td>
+                            <input type="text" class="form-control" 
+                            id="formDataUpdate_infoAgeUpdate" 
+                            name="infoAgeUpdate" 
+                            placeholder="Current Age" 
+                            ng-model="info.LastName" disabled="true">
+                          </td>                  
+                        </tr>
+
+                        <tr>
+                          <td>
+                            <h4>Age </h4>
+                          </td>
+                          <td>
+                            <input type="text" class="form-control" 
+                            id="formDataUpdate_infoAgeUpdate" 
+                            name="infoAgeUpdate" 
+                            placeholder="Current Age" 
+                            ng-model="info.Age" disabled="true">
+                          </td>
+                        </tr>
+
+                        <tr>
+                          <td>
+                            <h4>Gender </h4>
+                          </td>
+                          <td>
+                            <input type="text" class="form-control" 
+                            id="formDataUpdate_infoGenderUpdate" 
+                            name="infoGenderUpdate" 
+                            placeholder="Current Gender" 
+                            ng-model="info.Gender" disabled="true">
+                          </td>
+                        </tr>
+
+                        <tr>
+                          <td>
+                            <h4>Status </h4>
+                          </td>
+                          <td>
+                            <input type="text" class="form-control" 
+                            id="formDataUpdate_infoStatusUpdate" 
+                            name="infoGenderUpdate" 
+                            placeholder="Current Status" 
+                            ng-model="info.Status" disabled="true">
+                          </td>
+                        </tr>
+
+                      </table>
+                    </md-card-content>
+
+                  </md-card>
+                </div>
               </div>
 
-              
 
-            </md-content>
-
-          </md-sidenav>
-
-          <md-content flex="" layout-padding="">
-
-            <div layout="column" layout-align="top center">
-
-              <section style="border: 0px solid red;">
-
-
-                <div class="container">
-
-                <md-button ng-click="toggleLeft()" class="md-raised">
-                  Show All Clients
-                </md-button>
-
-                  <form name="SearchEmpInfoForm">
-                    <div class="row">
-
-                      <!-- <div class="col-md-12"> -->
-
-                          <md-content ng-hide="true">
-
-                          <div class="col-md-12" style="border: 0px solid #333;padding: 3% 3%;">
-
-                            <md-card>
-
-                              <md-toolbar class="md-theme-indigo">
-                                <h1 class="md-toolbar-tools">Search Clients</h1>
-                              </md-toolbar>
-
-                              <md-card-content>
-
-                                <md-input-container class="md-block">
-                                  <label for="fnames">First Name:</label>
-                                  <input required type="text" name="fnames" ng-model="formData.fnames" minlength="2" maxlength="100" />
-
-                                  <div ng-messages="SearchEmpInfoForm.fnames.$error" role="alert">
-                                    <div ng-message-exp="['required', 'minlength', 'maxlength', 'pattern']">
-                                      Input must be between 2 and 100 characters long.
-                                    </div>
-                                  </div>
-                                </md-input-container>
-
-                                <md-input-container class="md-block">
-                                  <label for="mnames">Middle Name:</label>
-                                  <input required type="text" name="mnames" ng-model="formData.mnames" minlength="" maxlength="100" />
-
-                                  <div ng-messages="SearchEmpInfoForm.mnames.$error" role="alert">
-                                    <div ng-message-exp="['required', 'minlength', 'maxlength', 'pattern']">
-                                      Input must be between 1 and 100 characters long.
-                                    </div>
-                                  </div>
-                                </md-input-container>
-
-                                <md-input-container class="md-block">
-                                  <label for="lnames">Last Name:</label>
-                                  <input required type="text" name="lnames" ng-model="formData.lnames" minlength="" maxlength="100" />
-
-                                  <div ng-messages="SearchEmpInfoForm.mnames.$error" role="alert">
-                                    <div ng-message-exp="['required', 'minlength', 'maxlength', 'pattern']">
-                                      Input must be between 1 and 100 characters long.
-                                    </div>
-                                  </div>
-                                </md-input-container>
-
-                                <p style="color: red;" ng-show="info.FirstName == null">There were no records found</p>
-
-
-                                <md-dialog-actions layout="row">
-                                  <md-button 
-                                  ng-click="getClientInfo()" 
-                                  md-autofocus type="submit" 
-                                  ng-show="formData.fnames != null && formData.fnames.length > 0 && formData.mnames != null && formData.mnames.length > 0 && formData.lnames != null && formData.lnames.length > 0">
-                                    Search Employee Records
-                                  </md-button>
-                                </md-dialog-actions>
-
-                              </md-card-content>
-
-                            </md-card>
-
-                          </div>
-
-                          </md-content>
-
-
-                          <div class="col-md-12" style="border: 0px solid #333;padding: 3% 3%;">
-                            <md-card>
-
-                              <md-toolbar class="md-theme-indigo">
-                                <h1 class="md-toolbar-tools">Search Results</h1>
-                              </md-toolbar>
-
-                              <md-card-content>
-
-                                <table id="updateTable">
-
-                                  <tr>
-                                    <td>
-                                      <h4>First Name: </h4>
-                                    </td>
-                                    <td>
-                                      <input type="text" class="form-control" 
-                                      id="formDataUpdate_infoFirstUpdate" 
-                                      name="infoFirstUpdate" 
-                                      placeholder="Current First Name" 
-                                      ng-model="info.FirstName" disabled="true">
-                                    </td>
-                                  </tr>
-
-                                  <tr>
-                                    <td>
-                                      <h4>Middle Name: </h4>
-                                    </td>
-                                    <td>
-                                      <input type="text" class="form-control" 
-                                      id="formDataUpdate_infoMiddleUpdate" 
-                                      name="infoMiddleUpdate" 
-                                      placeholder="Current Middle Name" 
-                                      ng-model="info.MiddleName" disabled="true">
-                                    </td>
-                                  </tr>
-
-
-                                  <tr>
-                                    <td>
-                                      <h4>Last Name: </h4>
-                                    </td>
-                                    <td>
-                                      <input type="text" class="form-control" 
-                                      id="formDataUpdate_infoAgeUpdate" 
-                                      name="infoAgeUpdate" 
-                                      placeholder="Current Age" 
-                                      ng-model="info.LastName" disabled="true">
-                                    </td>                  
-                                  </tr>
-
-                                  <tr>
-                                    <td>
-                                      <h4>Age </h4>
-                                    </td>
-                                    <td>
-                                      <input type="text" class="form-control" 
-                                      id="formDataUpdate_infoAgeUpdate" 
-                                      name="infoAgeUpdate" 
-                                      placeholder="Current Age" 
-                                      ng-model="info.Age" disabled="true">
-                                    </td>
-                                  </tr>
-
-                                  <tr>
-                                    <td>
-                                      <h4>Gender </h4>
-                                    </td>
-                                    <td>
-                                      <input type="text" class="form-control" 
-                                      id="formDataUpdate_infoGenderUpdate" 
-                                      name="infoGenderUpdate" 
-                                      placeholder="Current Gender" 
-                                      ng-model="info.Gender" disabled="true">
-                                    </td>
-                                  </tr>
-
-                                  <tr>
-                                    <td>
-                                      <h4>Status </h4>
-                                    </td>
-                                    <td>
-                                      <input type="text" class="form-control" 
-                                      id="formDataUpdate_infoStatusUpdate" 
-                                      name="infoGenderUpdate" 
-                                      placeholder="Current Status" 
-                                      ng-model="info.Status" disabled="true">
-                                    </td>
-                                  </tr>
-
-                                </table>
-                              </md-card-content>
-
-                            </md-card>
-                          </div>
-
-
-
-                          <!-- <md-button ng-click="toggleLeft()" class="md-raised">
-                          Show All Clients
-                          </md-button> -->
-
-                      <!-- </div> -->
-
-                      
-                    </div>
-
-                    <div class="row">
-                      <!-- <div class="col-md-12"> -->
-                        <div class="col-md-12" style="border: 0px solid #333;">
-                          <md-card>
-
-                            <md-toolbar class="md-theme-indigo">
-                              <h1 class="md-toolbar-tools">Add Progress Reports</h1>
-                            </md-toolbar>
-
-                            <md-card-content>
-
-                              <table id="ProgressReportTable" style="border: 0px solid red;width: 100%;">
-
-                                <tr>
-                                  <td>
-                                    <h4>{{ clock | date:'yyyy-MM-dd-HH:mm:ss'}}</h4>
-                                  </td>
-                                </tr>
-
-                                <tr>
-                                  <td>
-                                    <h4>Date and Time: </h4>
-                                  </td>
-                                  <td>
-                                    <md-input-container class="md-block">
-                                      <input type="text" 
-                                      id="progressReport_date" 
-                                      name="progressReport_date" 
-                                      placeholder="Current Date-Time" 
-                                      ng-model="formData.progressReport_date" disabled="true">
-                                    </md-input-container>
-
-                                  </td>
-                                </tr>
-
-                                <tr>
-                                  <td>
-                                    <h4>Hygiene: </h4>
-                                  </td>
-                                  <td>
-                                    <md-input-container class="md-block">
-                                      <input type="text"
-                                      required minlength="2" maxlength="100"
-                                      aria-label="Hygiene"
-                                      id="progressReport_hygiene" 
-                                      name="progressReport_hygiene" 
-                                      ng-model="formData.progressReport_hygiene">
-                                    </md-input-container>
-
-                                    <div ng-messages="SearchEmpInfoForm.progressReport_hygiene.$error" role="alert">
-                                    <div ng-message-exp="['required', 'minlength', 'maxlength']" style="color: red;font-size: 12px;">
-                                      Input must be between 2 and 100 characters long.
-                                    </div>
-                                  </div>
-
-                                  </td>
-                                </tr>
-
-                                <tr>
-                                  <td>
-                                    <h4>Hleath/Medication: </h4>
-                                  </td>
-                                  <td>
-                                    <md-input-container class="md-block">
-                                      <input type="text"
-                                      required minlength="2" maxlength="100"
-                                      aria-label="Hleath/Medication"
-                                      id="progressReport_healthmed" 
-                                      name="progressReport_healthmed" 
-                                      ng-model="formData.progressReport_healthmed">
-                                    </md-input-container>
-
-                                    <div ng-messages="SearchEmpInfoForm.progressReport_healthmed.$error" role="alert">
-                                    <div ng-message-exp="['required', 'minlength', 'maxlength']" style="color: red;font-size: 12px;">
-                                      Input must be between 2 and 100 characters long.
-                                    </div>
-                                  </div>
-                                    
-                                  </td>
-                                </tr>
-
-                                <tr>
-                                  <td>
-                                    <h4>Nutrition: </h4>
-                                  </td>
-                                  <td>
-                                    <md-input-container class="md-block">
-                                      <input type="text"
-                                      required minlength="2" maxlength="100"
-                                      id="progressReport_nutrition"
-                                      aria-label="Nutrition"
-                                      name="progressReport_nutrition" 
-                                      ng-model="formData.progressReport_nutrition">
-                                    </md-input-container>
-
-                                    <div ng-messages="SearchEmpInfoForm.progressReport_nutrition.$error" role="alert">
-                                    <div ng-message-exp="['required', 'minlength', 'maxlength']" style="color: red;font-size: 12px;">
-                                      Input must be between 2 and 100 characters long.
-                                    </div>
-                                  </div>
-
-                                  </td>
-                                </tr>
-
-                                <tr>
-                                  <td>
-                                    <h4>Appointments: </h4>
-                                  </td>
-                                  <td>
-                                    <md-input-container class="md-block">
-                                    <input type="text"
-                                    aria-label="Appointments"
-                                    required minlength="2" maxlength="100"
-                                    id="progressReport_appointments" 
-                                    name="progressReport_appointments" 
-                                    ng-model="formData.progressReport_appoitnments">
-                                    </md-input-container>
-
-                                    <div ng-messages="SearchEmpInfoForm.progressReport_appointments.$error" role="alert">
-                                    <div ng-message-exp="['required', 'minlength', 'maxlength']" style="color: red;font-size: 12px;">
-                                      Input must be between 2 and 100 characters long.
-                                    </div>
-                                  </div>
-
-                                  </td>
-                                </tr>
-
-                                <tr>
-                                  <td>
-                                    <h4>School/ Homework: </h4>
-                                  </td>
-                                  <td>
-                                    <md-input-container class="md-block">
-                                      <input type="text"
-                                      required minlength="2" maxlength="100"
-                                      aria-label="School/ Homework"
-                                      id="progressReport_schoolhw"
-                                      name="progressReport_schoolhw" 
-                                      ng-model="formData.progressReport_schoolhw">
-                                    </md-input-container>
-
-                                    <div ng-messages="SearchEmpInfoForm.progressReport_schoolhw.$error" role="alert">
-                                    <div ng-message-exp="['required', 'minlength', 'maxlength']" style="color: red;font-size: 12px;">
-                                      Input must be between 2 and 100 characters long.
-                                    </div>
-                                  </div>
-                                  </td>
-                                </tr>
-
-                                <tr>
-                                  <td>
-                                    <h4>Relationships: </h4>
-                                  </td>
-                                  <td>
-                                    <md-input-container class="md-block">
-                                      <input type="text"
-                                      required minlength="2" maxlength="100"
-                                      id="progressReport_rel"
-                                      name="progressReport_rel"
-                                      aria-label="Relationships"
-                                      ng-model="formData.progressReport_rel">
-                                    </md-input-container>
-
-                                    <div ng-messages="SearchEmpInfoForm.progressReport_rel.$error" role="alert">
-                                    <div ng-message-exp="['required', 'minlength', 'maxlength']" style="color: red;font-size: 12px;">
-                                      Input must be between 2 and 100 characters long.
-                                    </div>
-                                  </div>
-
-                                  </td>
-                                </tr>
-
-                                <tr>
-                                  <td>
-                                    <h4>AWOL Contact: </h4>
-                                  </td>
-                                  <td>
-                                    <md-input-container class="md-block">
-                                      <input type="text"
-                                      required minlength="2" maxlength="100"
-                                      aria-label="AWOL Contact"
-                                      id="progressReport_contact" 
-                                      name="progressReport_contact" 
-                                      ng-model="formData.progressReport_contact">
-                                    </md-input-container>
-
-                                    <div ng-messages="SearchEmpInfoForm.progressReport_contact.$error" role="alert">
-                                    <div ng-message-exp="['required', 'minlength', 'maxlength']" style="color: red;font-size: 12px;">
-                                      Input must be between 2 and 100 characters long.
-                                    </div>
-                                  </div>
-                                  </td>
-                                </tr>
-
-                                <tr>
-                                  <td>
-                                    <h4>Progress in Goals: </h4>
-                                  </td>
-                                  <td>
-                                    <md-input-container class="md-block">
-                                      <input type="text"
-                                      required minlength="2" maxlength="100"
-                                      aria-label="Progress in Goals"
-                                      id="progressReport_progressgoals" 
-                                      name="progressReport_progressgoals" 
-                                      ng-model="formData.progressReport_progressgoals">
-                                    </md-input-container>
-
-                                    <div ng-messages="SearchEmpInfoForm.progressReport_progressgoals.$error" role="alert">
-                                    <div ng-message-exp="['required', 'minlength', 'maxlength']" style="color: red;font-size: 12px;">
-                                      Input must be between 2 and 100 characters long.
-                                    </div>
-                                  </div>
-                                  </td>
-                                </tr>
-
-                              </table>
-
-                              <md-dialog-actions layout="row">
-                                <md-button 
-                                ng-click="AddProgressReport()"
-                                md-autofocus type="submit" 
-                                ng-show="info._id.length > 0">
-                                  Add Progress Report
-                                </md-button>
-                              </md-dialog-actions>
-
-                            </md-card-content>
-
-                          </md-card>
-                        </div>
-
-                        <div class="col-md-12" style="border: 0px solid #333;padding: 3% 3%;" ng-show="info._id.length > 0">
+              <div class="panel-group" id="accordion">
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <h4 class="panel-title">
+                      <a href="javascript:;" data-toggle="collapse" data-parent="#accordion" data-target="#collapseOne">
+                        Search Progress Reports
+                      </a>
+                    </h4>
+                  </div>
+                  <div id="collapseOne" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        
+                      <!-- Add Progress Report -->
+                      <div class="row">
+                        <!-- <div class="col-md-12"> -->
+
+
+
+                        <!-- <div class="col-md-12" style="border: 0px solid #333;padding: 3% 3%;" ng-show="info._id.length > 0"> -->
+                        <div class="col-md-12" style="border: 0px solid #333;padding: 3% 3%;">
 
                           <md-card>
 
                             <md-toolbar class="md-theme-indigo">
-                              <h1 class="md-toolbar-tools">View Progress reports</h1>
+                              <h1 class="md-toolbar-tools">View Progress Reports</h1>
                             </md-toolbar>
 
                             <md-card-content>
 
-                              <md-dialog-actions layout="row">
+                              <!-- <md-dialog-actions layout="row">
                                 <md-button 
+                                class="md-raised md-primary"
                                 ng-click="ViewProgressReportSpecific()" 
                                 md-autofocus type="submit" 
                                 ng-show="progressReport.length > 0">
                                   View Specific Progress Reports On:
                                 </md-button>
-                              </md-dialog-actions>
+                              </md-dialog-actions> -->
+
 
                               <br><br>
 
@@ -545,13 +329,14 @@
                               style="margin-bottom: 30px;" 
                               id="progressReport_progressgoals" 
                               name="progressReport_progressgoals" 
-                              ng-show="progressReport.length > 0"
+                              ng-hide="true"
                               placeholder="Paste Progress Report Date here" 
                               ng-model="formData.progressReport_SpecificDate" >
 
 
                               <md-dialog-actions layout="row">
                                 <md-button 
+                                class="md-raised md-primary"
                                 ng-click="ViewProgressReport()" 
                                 md-autofocus type="submit" >
                                   View Progress Reports On:
@@ -560,11 +345,22 @@
 
                               <br><br>
 
-                              <div ng-repeat="dates in progressReport">
+                              
+                              <!-- {{ dates.Date }} -->
+                                <!-- ng-click="ViewProgressReportSpecific()"  -->
+                                <div class="form-container" style="overflow-x: none;" ng-repeat="dates in progressReport">
 
-                                {{ dates.Date }}
+                                <ul>
+                                  <li  style="margin-left:-30px;"
+                                  ng-model="formData.progressReport_SpecificDate"
+                                  ng-click="ViewProgressReportSpecific(dates.Date)"
+                                  ><a href='#'>Report On: {{ dates.Date }}</a></li>
+                                </ul>
 
                               </div>
+                                
+
+                              
 
 
                               <br><br>
@@ -590,58 +386,325 @@
                             </md-card>
                         </div>
 
-                      <!-- </div> -->
-                    </div>
+                        <div class="col-md-12" style="border: 0px solid #333;padding: 3% 3%;" ng-repeat="specific in progressReportSpecific">
+                          <md-card>
 
-                    <div class="row">
-                      <hr>
+                            <md-toolbar class="md-theme-indigo">
+                                <h1 class="md-toolbar-tools">Results on {{ specific.Date }}</h1>
+                                </md-toolbar>
+                            <md-content>
 
-                      <div class="col-md-12" ng-repeat="specific in progressReportSpecific">
-                        <md-card>
-
-                          <md-toolbar class="md-theme-indigo">
-                              <h1 class="md-toolbar-tools">Results</h1>
-                              </md-toolbar>
-                          <md-content>
-
-                            <ul style="list-style: none;">
-                              <li><h4>Name : {{ specific.FirstName }} {{ specific.MiddleName }} {{ specific.LastName }} </h4></li>
-                              <li><h4>Hygiene : {{ specific.Hygiene }} </h4></li>
-                              <li><h4>Health and Medication : {{ specific.HealthMedication }} </h4></li>
-                              <li><h4>Nutrition : {{ specific.Nutrition }} </h4></li>
-                              <li><h4>Appointments : {{ specific.Appointments }} </h4></li>
-                              <li><h4>School/ Homework : {{ specific.SchoolHomework }} </h4></li>
-                              <li><h4>Relationships : {{ specific.Relationships }} </h4></li>
-                              <li><h4>AWOL Contact : {{ specific.AWOLContact }} </h4></li>
-                              <li><h4>Progress in Goals : {{ specific.ProgressGoals }} </h4></li>
-                              <li><h4>Created By : {{ specific.CreatedBy }} </h4></li>
-                            </ul>
+                              <ul style="list-style: none;">
+                                <li><h4>Name : {{ specific.FirstName }} {{ specific.MiddleName }} {{ specific.LastName }} </h4></li>
+                                <li><h4>Hygiene : {{ specific.Hygiene }} </h4></li>
+                                <li><h4>Health and Medication : {{ specific.HealthMedication }} </h4></li>
+                                <li><h4>Nutrition : {{ specific.Nutrition }} </h4></li>
+                                <li><h4>Appointments : {{ specific.Appointments }} </h4></li>
+                                <li><h4>School/ Homework : {{ specific.SchoolHomework }} </h4></li>
+                                <li><h4>Relationships : {{ specific.Relationships }} </h4></li>
+                                <li><h4>AWOL Contact : {{ specific.AWOLContact }} </h4></li>
+                                <li><h4>Progress in Goals : {{ specific.ProgressGoals }} </h4></li>
+                                <li><h4>Created By : {{ specific.CreatedBy }} </h4></li>
+                              </ul>
+                                
                               
-                            
-                            
+                              
 
-                          </md-content>
-                        </md-card>
-
-                      </div>
-                    </div>                      
-
-                    </form>
+                            </md-content>
+                          </md-card>
+                        </div>
 
 
+                      </div>      
+                    </div>
+                  </div>
                 </div>
+              </div>
 
-              </section>
+              <div class="panel-group" id="accordion">
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <h4 class="panel-title">
+                      <a href="javascript:;" data-toggle="collapse" data-parent="#accordion" data-target="#collapseTwo">
+                        Add Reports
+                      </a>
+                    </h4>
+                  </div>
+                  <div id="collapseTwo" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        
+                      <!-- Add Progress Report -->
+                      <div class="row">
 
-            </div>
+                        <div class="col-md-12" style="border: 0px solid #333;padding: 3% 3%;">
 
-          </md-content>
+                          <form name="SearchEmpInfoForm">
 
-        </section>
+                            <md-card>
 
-      </div>
+                              <md-toolbar class="md-theme-indigo">
+                                <h1 class="md-toolbar-tools">Add Progress Report</h1>
+                              </md-toolbar>
 
-    </md-content>
+
+                              <md-card-content>
+
+                                <table id="ProgressReportTable" style="border: 0px solid red;width: 100%;">
+
+                                  <tr>
+                                    <td>
+                                      <h4>{{ clock | date:'yyyy-MM-dd-HH:mm:ss'}}</h4>
+                                    </td>
+                                  </tr>
+
+                                  <tr>
+                                    <td>
+                                      <h4>Date and Time: </h4>
+                                    </td>
+                                    <td>
+                                      <md-input-container class="md-block">
+                                        <input type="text" 
+                                        id="progressReport_date" 
+                                        name="progressReport_date" 
+                                        placeholder="Current Date-Time" 
+                                        ng-model="formData.progressReport_date" disabled="true">
+                                      </md-input-container>
+
+                                    </td>
+                                  </tr>
+
+                                  <tr>
+                                    <td>
+                                      <h4>Hygiene: </h4>
+                                    </td>
+                                    <td>
+                                      <md-input-container class="md-block">
+                                        <input type="text"
+                                        required minlength="2" maxlength="100"
+                                        aria-label="Hygiene"
+                                        id="progressReport_hygiene" 
+                                        name="progressReport_hygiene" 
+                                        ng-model="formData.progressReport_hygiene">
+                                      </md-input-container>
+
+                                      <div ng-messages="SearchEmpInfoForm.progressReport_hygiene.$error" role="alert">
+                                      <div ng-message-exp="['required', 'minlength', 'maxlength']" style="color: red;font-size: 12px;">
+                                        Input must be between 2 and 100 characters long.
+                                      </div>
+                                    </div>
+
+                                    </td>
+                                  </tr>
+
+                                  <tr>
+                                    <td>
+                                      <h4>Hleath/Medication: </h4>
+                                    </td>
+                                    <td>
+                                      <md-input-container class="md-block">
+                                        <input type="text"
+                                        required minlength="2" maxlength="100"
+                                        aria-label="Hleath/Medication"
+                                        id="progressReport_healthmed" 
+                                        name="progressReport_healthmed" 
+                                        ng-model="formData.progressReport_healthmed">
+                                      </md-input-container>
+
+                                      <div ng-messages="SearchEmpInfoForm.progressReport_healthmed.$error" role="alert">
+                                      <div ng-message-exp="['required', 'minlength', 'maxlength']" style="color: red;font-size: 12px;">
+                                        Input must be between 2 and 100 characters long.
+                                      </div>
+                                    </div>
+                                      
+                                    </td>
+                                  </tr>
+
+                                  <tr>
+                                    <td>
+                                      <h4>Nutrition: </h4>
+                                    </td>
+                                    <td>
+                                      <md-input-container class="md-block">
+                                        <input type="text"
+                                        required minlength="2" maxlength="100"
+                                        id="progressReport_nutrition"
+                                        aria-label="Nutrition"
+                                        name="progressReport_nutrition" 
+                                        ng-model="formData.progressReport_nutrition">
+                                      </md-input-container>
+
+                                      <div ng-messages="SearchEmpInfoForm.progressReport_nutrition.$error" role="alert">
+                                      <div ng-message-exp="['required', 'minlength', 'maxlength']" style="color: red;font-size: 12px;">
+                                        Input must be between 2 and 100 characters long.
+                                      </div>
+                                    </div>
+
+                                    </td>
+                                  </tr>
+
+                                  <tr>
+                                    <td>
+                                      <h4>Appointments: </h4>
+                                    </td>
+                                    <td>
+                                      <md-input-container class="md-block">
+                                      <input type="text"
+                                      aria-label="Appointments"
+                                      required minlength="2" maxlength="100"
+                                      id="progressReport_appointments" 
+                                      name="progressReport_appointments" 
+                                      ng-model="formData.progressReport_appoitnments">
+                                      </md-input-container>
+
+                                      <div ng-messages="SearchEmpInfoForm.progressReport_appointments.$error" role="alert">
+                                      <div ng-message-exp="['required', 'minlength', 'maxlength']" style="color: red;font-size: 12px;">
+                                        Input must be between 2 and 100 characters long.
+                                      </div>
+                                    </div>
+
+                                    </td>
+                                  </tr>
+
+                                  <tr>
+                                    <td>
+                                      <h4>School/ Homework: </h4>
+                                    </td>
+                                    <td>
+                                      <md-input-container class="md-block">
+                                        <input type="text"
+                                        required minlength="2" maxlength="100"
+                                        aria-label="School/ Homework"
+                                        id="progressReport_schoolhw"
+                                        name="progressReport_schoolhw" 
+                                        ng-model="formData.progressReport_schoolhw">
+                                      </md-input-container>
+
+                                      <div ng-messages="SearchEmpInfoForm.progressReport_schoolhw.$error" role="alert">
+                                      <div ng-message-exp="['required', 'minlength', 'maxlength']" style="color: red;font-size: 12px;">
+                                        Input must be between 2 and 100 characters long.
+                                      </div>
+                                    </div>
+                                    </td>
+                                  </tr>
+
+                                  <tr>
+                                    <td>
+                                      <h4>Relationships: </h4>
+                                    </td>
+                                    <td>
+                                      <md-input-container class="md-block">
+                                        <input type="text"
+                                        required minlength="2" maxlength="100"
+                                        id="progressReport_rel"
+                                        name="progressReport_rel"
+                                        aria-label="Relationships"
+                                        ng-model="formData.progressReport_rel">
+                                      </md-input-container>
+
+                                      <div ng-messages="SearchEmpInfoForm.progressReport_rel.$error" role="alert">
+                                      <div ng-message-exp="['required', 'minlength', 'maxlength']" style="color: red;font-size: 12px;">
+                                        Input must be between 2 and 100 characters long.
+                                      </div>
+                                    </div>
+
+                                    </td>
+                                  </tr>
+
+                                  <tr>
+                                    <td>
+                                      <h4>AWOL Contact: </h4>
+                                    </td>
+                                    <td>
+                                      <md-input-container class="md-block">
+                                        <input type="text"
+                                        required minlength="2" maxlength="100"
+                                        aria-label="AWOL Contact"
+                                        id="progressReport_contact" 
+                                        name="progressReport_contact" 
+                                        ng-model="formData.progressReport_contact">
+                                      </md-input-container>
+
+                                      <div ng-messages="SearchEmpInfoForm.progressReport_contact.$error" role="alert">
+                                      <div ng-message-exp="['required', 'minlength', 'maxlength']" style="color: red;font-size: 12px;">
+                                        Input must be between 2 and 100 characters long.
+                                      </div>
+                                    </div>
+                                    </td>
+                                  </tr>
+
+                                  <tr>
+                                    <td>
+                                      <h4>Progress in Goals: </h4>
+                                    </td>
+                                    <td>
+                                      <md-input-container class="md-block">
+                                        <input type="text"
+                                        required minlength="2" maxlength="100"
+                                        aria-label="Progress in Goals"
+                                        id="progressReport_progressgoals" 
+                                        name="progressReport_progressgoals" 
+                                        ng-model="formData.progressReport_progressgoals">
+                                      </md-input-container>
+
+                                      <div ng-messages="SearchEmpInfoForm.progressReport_progressgoals.$error" role="alert">
+                                      <div ng-message-exp="['required', 'minlength', 'maxlength']" style="color: red;font-size: 12px;">
+                                        Input must be between 2 and 100 characters long.
+                                      </div>
+                                    </div>
+                                    </td>
+                                  </tr>
+
+                                </table>
+
+                                <md-dialog-actions layout="row">
+                                  <md-button class="md-raised"
+                                  ng-click="AddProgressReport()"
+                                  md-autofocus type="submit" 
+                                  ng-show="info._id.length > 0 &&
+                                  formData.progressReport_progressgoals.length > 0 &&
+                                  formData.progressReport_contact.length > 0 &&
+                                  formData.progressReport_rel.length > 0 &&
+                                  formData.progressReport_schoolhw.length > 0 &&
+                                  formData.progressReport_appoitnments.length > 0 &&
+                                  formData.progressReport_nutrition.length > 0 &&
+                                  formData.progressReport_healthmed.length > 0 &&
+                                  formData.progressReport_hygiene.length > 0
+                                  "
+
+                                  >
+                                    Add Progress Report
+                                  </md-button>
+                                </md-dialog-actions>
+
+                              </md-card-content>
+
+                            </md-card>
+                          </form>
+                        </div>
+
+
+                      </div>      
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+
+               
+
+          </div>
+
+
+
+        </div>
+
+
+      </section>
+
+    </div>
+
+
   </div>
 
 
@@ -651,11 +714,11 @@
 
     
     <!-- Latest compiled and minified JavaScript -->
-    <script src="/js/bootstrap.min.js"></script>
+    <!-- <script src="/js/bootstrap.min.js"></script> -->
 
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> -->
 
 
 
@@ -665,6 +728,9 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-animate.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-sanitize.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-aria.min.js"></script> -->
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
     <script src="/js/angular/angular.js"></script>
     <script src="/js/angular-animate/angular-animate.js"></script>

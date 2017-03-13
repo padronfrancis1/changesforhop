@@ -39,8 +39,57 @@
   <%- include partials/nav.ejs %>
 
     <section ng-controller="MyCtrl">
+    
+    <div class="row">
+      <md-sidenav class="md-sidenav-left" md-component-id="left" md-disable-backdrop="" md-whiteframe="4" style="border: 0px solid #333;position: fixed;" >
+
+        <md-toolbar class="md-theme-indigo"  flex="none">
+          <h1 class="md-toolbar-tools">Clients List</h1>
+        </md-toolbar>
+
+
+        <md-content layout-margin="">
+
+          <md-button ng-click="toggleLeft()" class="md-raised md-warn">
+          Close Window
+          </md-button>
+
+          <h2>Search Client</h2>
+          <input type="text" ng-model="nameText">
+
+          <h3>All Cients List</h3>
+
+          <div class="form-container" style="overflow-x: scroll;">
+          
+              <h4>Number of Clients: {{clients.length}}</h4>
+              <hr>
+              <!-- <ul ng-repeat="person in clients| filter:nameText" ng-click="goToPerson(person.FirstName, person.MiddleName,person.LastName)"> -->
+              <ul ng-repeat="person in clients| filter:nameText">
+                <li style="margin-left:-30px;">
+                {{ person.FirstName }}
+                {{ person.MiddleName }}
+                {{ person.LastName }}
+                </li>
+
+              </lu>
+              
+          </div>
+
+
+          
+        </md-content>
+
+      </md-sidenav>
+
+    </div>
+    
       <div class="container"  style="width: 50%; margin: 50px auto;">
         <div class="row">
+          <div class="col-md-12">
+            <md-button ng-click="toggleLeft()" class="md-raised">
+              Show All Clients
+            </md-button>
+          </div>
           <div class="col-md-12">
 
             <md-card>
@@ -107,29 +156,8 @@
                       </div>
                     </div>
 
-
-                    <!-- <div role="alert">
-                      <span class="error" ng-show="signupForm.age.$error.required">
-                        Required!</span>
-                      <span class="error" ng-show="signupForm.age.$error.number">
-                        Not valid number!</span>
-                    </div>
- -->
                   </md-input-container>
 
-                  <!-- <md-input-container class="md-block">
-                    <input type="text"
-                    id="gender" name="gender"
-                    placeholder="Gender" 
-                    ng-model="formData.gender"
-                    required minlength="2" maxlength="100"
-                    >
-                    <div ng-messages="signupForm.gender.$error" role="alert">
-                      <div ng-message-exp="['required', 'minlength', 'maxlength']" style="color: red;">
-                        Input must be between 2 and 100 characters long.
-                      </div>
-                    </div>
-                  </md-input-container> -->
                   <label>Gender</label>
                   <md-input-container class="md-block">
                     <md-select ng-model="gender" id="gender" name="gender" required minlength="2" maxlength="100">
@@ -183,60 +211,6 @@
               </md-card-content>
 
             </md-card>
-
-            <!-- <div class="form-container">
-
-              <form method="POST" id="signupForm" action="/admin/add/client">
-                <div class="form-group">
-                  
-                  <label for="fname">First Name <span>(required, at least 2 chaaracters</span></label>
-
-                  <input type="text" class="form-control" placeholder="First Name" name="fname" />
-                </div>
-
-                <label for="mname">Middle Name <span>(required, at least 2 chaaracters</span></label>
-
-                <div class="form-group">
-                  <input type="text" class="form-control" placeholder="Middle Name" name="mname" id="mname"/>
-                </div>
-
-
-                <label for="lname">Last Name <span>(required, at least 2 chaaracters</span></label>
-
-                <div class="form-group">
-                  <input type="text" class="form-control" placeholder="Last Name" name="lname" id="lname"/>
-                </div>
-
-
-                <label for="age">Age</label>
-
-                <div class="form-group">
-                  <input type="text" class="form-control" placeholder="Age" name="age" id="age"/>
-                </div>
-
-                <label for="gender">Gender</label>
-
-                <div class="form-group">
-                  <input type="text" class="form-control" placeholder="Gender" name="gender" id="gender"/>
-                </div>
-
-                <label for="gender">Status</label>
-
-                <div class="form-group">
-                  <input type="text" class="form-control" placeholder="Status" name="status" id="status"/>
-                </div>
-
-
-                <button type="submit" class="btn btn-default"> Submit </button>
-              
-              </form>
-
-              <hr>
-
-            </div> -->
-
-
-            
           </div>
         </div>
       </div>

@@ -11,7 +11,14 @@ var UserSchema = new mongoose.Schema({
 	Address: String,
 	email: String,
 	PermissionType: String,
-	hashed_password: String
+	hashed_password: String,
+	Month: String,
+	Year: String,
+	CurrentDate : String,
+	CurrentDateTime: String,
+	TimeIn : String,
+	TimeOut : String
+
 });
 
 mongoose.model('User', UserSchema);

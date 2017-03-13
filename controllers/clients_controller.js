@@ -35,7 +35,7 @@ exports.AddClient = function(req, res)
 
 					// res.session.error = err;
 					console.log(err);
-					res.redirect('/adminAddClient');
+					// res.redirect('/adminAddClient');
 
 				} else {
 					console.log("Successful Client Add");
@@ -231,6 +231,11 @@ exports.ViewProgressReportSpecific = function(req, res)
 {
 	
 	console.log("I got the Specific Progress Report Request View");
+	console.log(req.body.fnames);
+	console.log(req.body.mnames);
+	console.log(req.body.lnames);
+	console.log(req.body.progressReport_SpecificDate);
+	
 	progressReports.find({ FirstName: req.body.fnames, MiddleName: req.body.mnames, LastName: req.body.lnames, Date: req.body.progressReport_SpecificDate }).exec(function(err, ProgressReportSpecific) {
 
 		if(ProgressReportSpecific)

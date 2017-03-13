@@ -7,7 +7,9 @@ var UserTimeLogs = new mongoose.Schema({
 	email: String,
 	CurrentDate: String,
 	TimeIn: String,
-	TimeOut: String
+	TimeOut: String,
+	Month: String,
+	Year: String
 });
 
 mongoose.model('UserTimeLogs', UserTimeLogs);

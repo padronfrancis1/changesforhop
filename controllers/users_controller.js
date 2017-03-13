@@ -60,6 +60,36 @@ exports.checkUserName = function(req, res) {
 
 exports.signup = function(req, res) {
 
+	var user = new User(mongoose.model('User'));
+
+	user.set('username', req.body.username)
+	user.set('hashed_password', hashPW(req.body.password));
+	user.set('FirstName', req.body.firstname);
+	user.set('MiddleName', req.body.middlename);
+	user.set('LastName', req.body.lastname);
+	user.set('PhoneNumber', req.body.phonenumber);
+	user.set('Address', req.body.address);
+	user.set('PermissionType', req.body.permission);
+	user.set('email', req.body.email);
+
+	user.save(function(err){
+
+		if(err) {
+
+			res.session.error = err;
+			res.redirect('/signup');
+
+		} else {
+
+			req.session.user = user.id;
+			req.session.username = user.username;
+			req.session.msg = 'Authenticated as ' + user.username;
+
+			req.session.destroy(function(){
+		  		res.redirect('/login');
+		  	});
+		}
+	});
 
 	User.findOne({ username: req.body.username }).exec(function(err, user) {
 
@@ -72,36 +102,7 @@ exports.signup = function(req, res) {
 		} else {
 
 
-			var user = new User(mongoose.model('User'));
-
-			user.set('username', req.body.username)
-			user.set('hashed_password', hashPW(req.body.password));
-			user.set('FirstName', req.body.firstname);
-			user.set('MiddleName', req.body.middlename);
-			user.set('LastName', req.body.lastname);
-			user.set('PhoneNumber', req.body.phonenumber);
-			user.set('Address', req.body.address);
-			user.set('PermissionType', req.body.permission);
-			user.set('email', req.body.email);
-
-			user.save(function(err){
-
-				if(err) {
-
-					res.session.error = err;
-					res.redirect('/signup');
-
-				} else {
-
-					req.session.user = user.id;
-					req.session.username = user.username;
-					req.session.msg = 'Authenticated as ' + user.username;
-
-					req.session.destroy(function(){
-				  		res.redirect('/login');
-				  	});
-				}
-			});
+			
 		}
 
 	});
@@ -123,7 +124,23 @@ function admin(req, res) {
 	var date = new Date();
 
 	var currentDate = moment(date).format('M/D/YYYY');
+	var currentDateTime = moment(date).format('M/D/YYYY h:mm:ss a');
 	var currentTime = moment(date).format('h:mm:ss a');
+
+	var currentMonth = moment(date).format('M');
+	var currentYear = moment(date).format('YYYY');
+
+	var timeIn = new User(mongoose.model('User'));
+
+
+	// 		console.log("You have an admin account");
+	// 		console.log(user.username);
+	// 		console.log(user.email);
+	// 		console.log(currentDate);
+	// 		console.log(currentMonth);
+	// 		console.log(currentYear);
+	// 		console.log(currentTime);
+	console.log(currentDateTime);
 
 	User.findOne({ username: req.body.username }).exec(function(err, user) {
 
@@ -134,36 +151,39 @@ function admin(req, res) {
 		} else if (user.hashed_password === hashPW(req.body.password.toString())) {
 
 			console.log("You have an admin account");
+			console.log(user.username);
+			console.log(user.email);
+			console.log(currentDate);
+			console.log(currentMonth);
+			console.log(currentYear);
+			console.log(currentTime);
 
-			mongoose.Promise = global.Promise;
-			var db = mongoose.createConnection('mongodb://admin:admin@ds145329.mlab.com:45329/changesforhope');
-			// var db = mongoose.createConnection('mongodb://localhost/changesforhope');
-
-			db.collection('users').insert({
-
-				username : req.body.username,
-				email: user.email,
-				CurrentDate : currentDate,
-				TimeIn : currentTime,
-				TimeOut : "NULL",
+			timeIn.set('username', req.body.username)
+			timeIn.set('email', user.email);
+			timeIn.set('CurrentDate', currentDate);
+			timeIn.set('Year', currentYear);
+			timeIn.set('Month', currentMonth);
+			timeIn.set('TimeIn', currentTime);
+			timeIn.set('TimeOut', "NULL");
 
 
-			}, function(err, success){
-				if(err)
-				{
-					console.log(err);
+			timeIn.save(function(err){
+
+				if(err) {
+
+					console.log("error");
+
 				} else {
-					console.log(success);
+					console.log("inserted");
+					
 				}
 			});
-
 
 			req.session.regenerate(function(){
 				
 				req.session.user = user.id;
-
 				req.session.username = user.username;
-
+				req.session.email = user.email;
 				req.session.msg = 'Authenticated as ' + user.username;
 
 				// res.redirect('/');
@@ -193,9 +213,12 @@ var user = function(req, res) {
 	var date = new Date();
 
 	var currentDate = moment(date).format('M/D/YYYY');
+	var currentDateTime = moment(date).format('M/D/YYYY h:mm:ss a');
 	var currentTime = moment(date).format('h:mm:ss a');
-	console.log(currentDate);
-	console.log(currentTime);
+
+	var currentMonth = moment(date).format('M');
+	var currentYear = moment(date).format('YYYY');
+
 
 	User.findOne({ username: req.body.username }).exec(function(err, user) {
 
@@ -205,35 +228,45 @@ var user = function(req, res) {
 
 		} else if (user.hashed_password === hashPW(req.body.password.toString())) {
 
+			console.log("You have an admin account");
+			console.log(user.username);
+			console.log(user.email);
+			console.log(currentDate);
+			console.log(currentMonth);
+			console.log(currentYear);
+			console.log(currentTime);
 
-			mongoose.Promise = global.Promise;
-			var db = mongoose.createConnection('mongodb://admin:admin@ds145329.mlab.com:45329/changesforhope');
-			// var db = mongoose.createConnection('mongodb://localhost/changesforhope');
-
-			db.collection('users').insert({
-
-				username : req.body.username,
-				email: user.email,
-				CurrentDate : currentDate,
-				TimeIn : currentTime,
-				TimeOut : "NULL",
+			timeIn.set('username', req.body.username)
+			timeIn.set('email', user.email);
+			timeIn.set('CurrentDate', currentDate);
+			timeIn.set('Year', currentYear);
+			timeIn.set('Month', currentMonth);
+			timeIn.set('TimeIn', currentTime);
+			timeIn.set('TimeOut', "NULL");
 
 
-			}, function(err, success){
-				if(err)
-				{
-					console.log(err);
+			timeIn.save(function(err){
+
+				if(err) {
+
+					console.log("error");
+
 				} else {
-					console.log(success);
+					console.log("inserted");
+					
 				}
 			});
 
 
 			req.session.regenerate(function(){
+				
 				req.session.user = user.id;
 				req.session.username = user.username;
+				req.session.email = user.email;
 				req.session.msg = 'Authenticated as ' + user.username;
+
 				res.redirect('/');
+				// res.redirect('/adminPage');
 			});
 
 
@@ -280,46 +313,88 @@ exports.logoutUser = function(req, res) {
 	// var currentDate = moment(date).format('MMMM Do YYYY, h:mm:ss a');
 	var currentDate = moment(date).format('M/D/YYYY');
 	var currentTime = moment(date).format('h:mm:ss a');
+
+	var currentMonth = moment(date).format('M');
+	var currentYear = moment(date).format('YYYY');
+	var currentDay = moment(date).format('D');
+
+	var currentHour = moment(date).format('h');
+	var currentMinutes = moment(date).format('mm');
+	var currentSeconds = moment(date).format('ss');
+
+
+	console.log(req.session.username);
+	console.log(req.session.email);
 	console.log(currentDate);
 	console.log(currentTime);
+	console.log(currentMonth);
+	console.log(currentYear);
+	console.log("------------");
 
-	User.findOne({username: req.session.username, CurrentDate: currentDate, TimeOut: "NULL" }).exec(function(err, user) {
+
+	User.findOne({CurrentDate : currentDate, username: req.session.username, email: req.session.email, TimeOut: "NULL" }).sort({$natural:-1}).exec(function(err, user) {
 
 		if(user) {
+			console.log("Found 1");
 
+			// console.log("timein: " + currentYear, currentMonth, currentDay, user.TimeIn);
+			// console.log("timeout: " + currentYear, currentMonth, currentDay, currentTime);
+			//var totalHrs = 
+
+			// log out time
+			var newStart = new Date(currentYear, currentMonth, currentDay, currentHour, currentMinutes, currentSeconds);
+
+
+
+
+
+			var logOutTime = user.TimeIn;
+			var newlogOutTime = logOutTime.substr(0, logOutTime.length-3); //remove am/pm
+			var separate = logOutTime.split(':');
+
+			console.log(separate[0], separate[1], separate[2])
+			var currentHour_out = moment(date).format('h');
+			var currentMinutes = moment(date).format('mm');
+			var currentSeconds = moment(date).format('ss');
+
+			var dateOut = new Date(currentYear, currentMonth, currentDay, separate[0], separate[1], separate[2]);
+
+			// var currentHour_timeIn = moment(dateOut).format('h');
+			// var currentMinutes_timeIn = moment(dateOut).format('mm');
+			// var currentSeconds_timeIn = moment(dateOut).format('ss');
+
+			// // var newEnd =  new Date (currentYear, currentMonth, currentDay, currentHour_timeIn, currentMinutes_timeIn, currentSeconds_timeIn);
+
+			// console.log(newStart);
+			console.log(dateOut);
 			
+
+			var userInstance = new User(mongoose.model('User'));
+
+			user.set('TimeOut', currentTime);
+			//user.set('NumbHrs', numHrs);
 			
-			mongoose.Promise = global.Promise;
-			var db = mongoose.createConnection('mongodb://admin:admin@ds145329.mlab.com:45329/changesforhope');
-			// var db = mongoose.createConnection('mongodb://localhost/changesforhope');
-			db.collection('users').update(
-			{
-
-				username : user.username,
-				email : user.email,
-				CurrentDate : currentDate,
-				TimeOut: "NULL"
-			},
-			{
-				$set: { TimeOut: currentTime}
-
-			}, function(err, success){
-				if(err)
-				{
-					console.log(err);
-					console.log("I have NOT updated the data");
+			user.save(function(err){
+				if(err) {
+					console.log(err)
 				} else {
-					console.log(success);
-					console.log("Ive updated the data");
+					// console.log("updated")
+					// console.log("username " + user.username);
+					// console.log("user email " + user.email);
+					// console.log("month " + user.Month);
+					// console.log("year " + user.Year);
+					
+					// console.log("timeout " + user.TimeOut);
+					
 				}
+				//res.redirect('/user');
 			});
 
+
 		} else {
-			console.log(err);
+
+			console.log("No User Found");
 		}
-
-		
-
 	});
 
 	req.session.destroy(function(){
@@ -380,90 +455,27 @@ exports.deleteUser = function(req, res) {
 	});
 };
 
+
+
 exports.ViewTimeLogs = function(req, res) {
 
 	var startDate = req.body.startDate;
 	var endDate = req.body.endDate;
-	// var response = str.substring(0,12);
-	// console.log(str);
-	
-	// console.log(startDate);
-	// console.log(endDate);
 
-	var start = new Date(startDate);
-	var end = new Date(endDate);
-	var current = new Date(start);
-	
-	var between = [];
+	console.log(startDate);
+	console.log(endDate);
 
-	while(current <= end) {
-	    // day = date1.getDate()
-	    // date1 = new Date(date1.setDate(--day));  
-	    between.push(new Date(current).toLocaleDateString());
-	    current.setDate(current.getDate() + 1)
-	}
-	// console.log(start);
-	// console.log(end);
-	// console.log(between);
+	User.find({ Month: startDate, Year: endDate }).exec(function(err, user) {
 
-	
-	var timelogs = [];
-	
-	for(i = 0; i < between.length; i++)	{
-
-		User.find({ CurrentDate: {$in: [between[i]] } }).exec(function(err, timelog) {
-		//User.find({ CurrentDate: {$elemMatch: {CurrentDate: '3/8/2017'} } }).exec(function(err, timelog) {
-
-
-		for(x = 0; x < timelog.length; x++) {
-			//console.log(timelog[x]);
-			timelogs.push(timelog[x]);
-			res.contentType('application/json');
-			res.send(JSON.stringify(timelogs));
+		if(err) {
+			console.log(err);
+		} else {
+			res.json(user);
+			console.log(user);
 		}
 
-		
+	});
 
-
-		});
-
-		//res.json(timelogs);
-	};
-	
-	
-		
-	// for(i = 0; i < between.length; i++)	{
-		
-	// 	User.find({ CurrentDate: between[i] }).exec(function(err, data) {
-
-			
-			
-	// 		if(i < between.length) {
-	// 			timelogs.push(data);
-	// 		} else {
-	// 			res.json(timelogs);
-	// 		}
-
-	// 		//res.json(timelogs);
-			
-	// 		// if(err) {
-	// 		// 	console.log(err);
-	// 		// } else {
-	// 		// 	//res.json(timelog);
-	// 		// 	timelogs.push(data);
-	// 		// }
-	// 	});
-		
-		
-	// }
-	
-
-	
-	
-	// User.find({username: "user", email: "user", CurrentDate: currentDate }).exec(function(err, user) {
-	// User.find({username: req.body.empUserNameTimeLog , CurrentDate: currentDate }).exec(function(err, user) {
-	// User.find({ $or: [{ username: req.body.empUserNameTimeLog }, { email: req.body.empEmailTimeLog }] , CurrentDate: currentDate }).exec(function(err, user) {
-	
 
 };
 

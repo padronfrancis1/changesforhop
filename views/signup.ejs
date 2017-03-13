@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Dashboard</title>
+    <title>Signup</title>
 
     <!-- Bootstrap -->
     <!-- Latest compiled and minified CSS -->
@@ -23,6 +23,12 @@
         color: red;
       }
     </style>
+
+    <script type="text/javascript">
+      function Reload() {
+          location.reload();
+      }
+    </script>
 
 
 
@@ -49,10 +55,11 @@
             </md-toolbar>
             <md-card-content>
 
-              <button class="btn btn-default" ng-click="checkUserName()"> Check User Name </button>
+              <md-button class="md-raised md-primary" ng-click="checkUserName()">Check User Name</md-button>
+              <md-button class="md-raised md-primary" onclick="Reload()">Try Again</md-button>
               <br>
               <br>
-              <p ng-show="userExist.username == nul" style="color: blue;">User does not exist</p>
+              <!-- <p ng-show="userExist.username == null" style="color: blue;">User does not exist</p> -->
               <br>
               <br>
 
@@ -61,6 +68,7 @@
                 <md-input-container class="md-block">
                   <input type="text"
                   id="username" name="username"
+                  
                   placeholder="Enter Username" 
                   ng-model="formData.username"
                   required minlength="2" maxlength="100"
@@ -74,10 +82,12 @@
 
                 </md-input-container>
 
-                <div ng-show="userExist.username == nul">
+                <div ng-hide="userExist == true" ng-show="userExist == false">
 
                   <md-input-container class="md-block">
                     <input type="text"
+                    ng-hide="userExist == true" 
+                    ng-show="userExist == false"
                     id="firstname" name="firstname"
                     placeholder="Enter First Name" 
                     ng-model="formData.firstname"
