@@ -124,7 +124,7 @@ function admin(req, res) {
 	var date = new Date();
 
 	var currentDate = moment(date).format('M/D/YYYY');
-	var currentDateTime = moment(date).format('M/D/YYYY h:mm:ss a');
+	var currentDateTime = moment(date).format('M/D/YYYY HH:mm:ss');
 	var currentTime = moment(date).format('h:mm:ss a');
 
 	var currentMonth = moment(date).format('M');
@@ -150,21 +150,16 @@ function admin(req, res) {
 
 		} else if (user.hashed_password === hashPW(req.body.password.toString())) {
 
-			console.log("You have an admin account");
-			console.log(user.username);
-			console.log(user.email);
-			console.log(currentDate);
-			console.log(currentMonth);
-			console.log(currentYear);
-			console.log(currentTime);
+			
 
 			timeIn.set('username', req.body.username)
 			timeIn.set('email', user.email);
 			timeIn.set('CurrentDate', currentDate);
 			timeIn.set('Year', currentYear);
 			timeIn.set('Month', currentMonth);
-			timeIn.set('TimeIn', currentTime);
+			timeIn.set('TimeIn', currentDateTime);
 			timeIn.set('TimeOut', "NULL");
+			timeIn.set('CurrentDateTime', currentDateTime);
 
 
 			timeIn.save(function(err){
@@ -175,6 +170,13 @@ function admin(req, res) {
 
 				} else {
 					console.log("inserted");
+					console.log(user.username);
+					console.log(user.email);
+					console.log(currentDate);
+					console.log(currentMonth);
+					console.log(currentYear);
+					console.log(currentTime);
+					console.log(currentDateTime);
 					
 				}
 			});
@@ -213,7 +215,7 @@ var user = function(req, res) {
 	var date = new Date();
 
 	var currentDate = moment(date).format('M/D/YYYY');
-	var currentDateTime = moment(date).format('M/D/YYYY h:mm:ss a');
+	var currentDateTime = moment(date).format('M/D/YYYY HH:mm:ss');
 	var currentTime = moment(date).format('h:mm:ss a');
 
 	var currentMonth = moment(date).format('M');
@@ -228,20 +230,13 @@ var user = function(req, res) {
 
 		} else if (user.hashed_password === hashPW(req.body.password.toString())) {
 
-			console.log("You have an admin account");
-			console.log(user.username);
-			console.log(user.email);
-			console.log(currentDate);
-			console.log(currentMonth);
-			console.log(currentYear);
-			console.log(currentTime);
-
 			timeIn.set('username', req.body.username)
 			timeIn.set('email', user.email);
 			timeIn.set('CurrentDate', currentDate);
 			timeIn.set('Year', currentYear);
 			timeIn.set('Month', currentMonth);
-			timeIn.set('TimeIn', currentTime);
+			timeIn.set('TimeIn', currentDateTime);
+			timeIn.set('CurrentDateTime', currentDateTime);
 			timeIn.set('TimeOut', "NULL");
 
 
@@ -253,6 +248,14 @@ var user = function(req, res) {
 
 				} else {
 					console.log("inserted");
+					console.log("inserted");
+					console.log(user.username);
+					console.log(user.email);
+					console.log(currentDate);
+					console.log(currentMonth);
+					console.log(currentYear);
+					console.log(currentTime);
+					console.log(currentDateTime);
 					
 				}
 			});
@@ -312,7 +315,7 @@ exports.logoutUser = function(req, res) {
 
 	// var currentDate = moment(date).format('MMMM Do YYYY, h:mm:ss a');
 	var currentDate = moment(date).format('M/D/YYYY');
-	var currentTime = moment(date).format('h:mm:ss a');
+	var currentTime = moment(date).format('M/D/YYYY HH:mm:ss');
 
 	var currentMonth = moment(date).format('M');
 	var currentYear = moment(date).format('YYYY');
@@ -333,51 +336,42 @@ exports.logoutUser = function(req, res) {
 
 
 	User.findOne({CurrentDate : currentDate, username: req.session.username, email: req.session.email, TimeOut: "NULL" }).sort({$natural:-1}).exec(function(err, user) {
+	//User.findOne({CurrentDate : currentDate, username: req.session.username, email: req.session.email, TimeOut: "NULL" }).exec(function(err, user) {
 
 		if(user) {
 			console.log("Found 1");
 
-			// console.log("timein: " + currentYear, currentMonth, currentDay, user.TimeIn);
-			// console.log("timeout: " + currentYear, currentMonth, currentDay, currentTime);
-			//var totalHrs = 
+			console.log("username " + user.username);
+			console.log("user email " + user.email);
+			console.log("month " + user.Month);
+			console.log("year " + user.Year);
+			console.log("Current Date " + user.CurrentDate);
+			console.log("Time In " + user.TimeIn);
+			console.log("Time Out " + user.TimeOut);
+			console.log("Current Date Time " + user.CurrentDateTime);			
 
-			// log out time
-			var newStart = new Date(currentYear, currentMonth, currentDay, currentHour, currentMinutes, currentSeconds);
 
+			// var NewTimeIn = new Date(separate_OutDate[0] + '-' + separate_OutDate[1] + '-' + separate_OutDate[2] + '-' + separate_OutTime[0] + '-' + separate_OutTime[1] + '-' + separate_OutTime[2]);
+			var NewTimeIn = new Date(user.TimeIn)
+			console.log(NewTimeIn);
 
+			var NewTimeOut = new Date(currentTime)
+			console.log(NewTimeOut);
 
-
-
-			var logOutTime = user.TimeIn;
-			var newlogOutTime = logOutTime.substr(0, logOutTime.length-3); //remove am/pm
-			var separate = logOutTime.split(':');
-
-			console.log(separate[0], separate[1], separate[2])
-			var currentHour_out = moment(date).format('h');
-			var currentMinutes = moment(date).format('mm');
-			var currentSeconds = moment(date).format('ss');
-
-			var dateOut = new Date(currentYear, currentMonth, currentDay, separate[0], separate[1], separate[2]);
-
-			// var currentHour_timeIn = moment(dateOut).format('h');
-			// var currentMinutes_timeIn = moment(dateOut).format('mm');
-			// var currentSeconds_timeIn = moment(dateOut).format('ss');
-
-			// // var newEnd =  new Date (currentYear, currentMonth, currentDay, currentHour_timeIn, currentMinutes_timeIn, currentSeconds_timeIn);
-
-			// console.log(newStart);
-			console.log(dateOut);
-			
+			var numHrs = Math.abs(NewTimeIn - NewTimeOut) / 1000;
+			console.log(numHrs);
 
 			var userInstance = new User(mongoose.model('User'));
 
 			user.set('TimeOut', currentTime);
-			//user.set('NumbHrs', numHrs);
+			user.set('NumbHrs', numHrs);
 			
 			user.save(function(err){
 				if(err) {
 					console.log(err)
 				} else {
+
+
 					// console.log("updated")
 					// console.log("username " + user.username);
 					// console.log("user email " + user.email);
@@ -459,13 +453,11 @@ exports.deleteUser = function(req, res) {
 
 exports.ViewTimeLogs = function(req, res) {
 
-	var startDate = req.body.startDate;
-	var endDate = req.body.endDate;
+	var month = req.body.Month;
+	var year = req.body.Year;
 
-	console.log(startDate);
-	console.log(endDate);
 
-	User.find({ Month: startDate, Year: endDate }).exec(function(err, user) {
+	User.find({ Month: month, Year: year }).exec(function(err, user) {
 
 		if(err) {
 			console.log(err);

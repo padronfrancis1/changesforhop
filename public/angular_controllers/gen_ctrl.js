@@ -1,5 +1,5 @@
 // JavaScript source code
-var myApp = angular.module('myApp', ['daterangepicker', 'ngFileUpload', 'ngMaterial', , 'md.data.table', 'ngMessages', 'ui.bootstrap', 'ui.bootstrap.datetimepicker']);
+var myApp = angular.module('myApp', ['daterangepicker', 'ngFileUpload', 'ngMaterial', 'ngMessages', 'ui.bootstrap', 'ui.bootstrap.datetimepicker']);
 
 myApp.directive('validPasswordC', function() {
   return {
@@ -510,30 +510,38 @@ myApp.controller('MyCtrl',['$scope', '$http', '$filter',  '$interval', '$mdSiden
 		}
 
 
+
 		$scope.ShowTimeLogs = function(req, res) {
 
 			$scope.logs = "";
-			// $scope.convertedDateLog = $filter('date')($scope.dt, 'medium');
+			$scope.formData = {};
+
+			$scope.convertedDateLog_Month = $filter('date')($scope.dt, 'M');
+			$scope.convertedDateLog_Year = $filter('date')($scope.dt, 'yyyy');
+
+			console.log($scope.convertedDateLog_Month);
+			console.log($scope.convertedDateLog_Year);
+
 			// $scope.cnvrtdStartDate = $filter('date')($scope.SelectedDate.startDate, 'medium');
 			// $scope.cnvrtdEndDate = $filter('date')($scope.SelectedDate.endDate, 'medium');
 
-			$scope.cnvrtdStartDate = moment($scope.SelectedDate.startDate);
-			$scope.cnvrtdEndDate = moment($scope.SelectedDate.endDate);
+			// $scope.cnvrtdStartDate = moment($scope.SelectedDate.startDate);
+			// $scope.cnvrtdEndDate = moment($scope.SelectedDate.endDate);
 
-			var res = {
+			// var res = {
 
-				startDate: $scope.cnvrtdStartDate.format("M"),
-				endDate: $scope.cnvrtdEndDate.format("YYYY"),
-			    // exStartTime: e.format("MM/DD/YYYY hh:mm A"),
-			    // exEndTime: f.format("MM/DD/YYYY hh:mm A")
+			// 	startDate: $scope.cnvrtdStartDate.format("M"),
+			// 	endDate: $scope.cnvrtdEndDate.format("YYYY"),
+			//     // exStartTime: e.format("MM/DD/YYYY hh:mm A"),
+			//     // exEndTime: f.format("MM/DD/YYYY hh:mm A")
 
-			}
+			// }
 
-			console.log(res.startDate);
-			console.log(res.endDate);
+			// console.log(res.startDate);
+			// console.log(res.endDate);
 
-			$scope.formData.startDate = res.startDate;
-			$scope.formData.endDate = res.endDate;
+			$scope.formData.Month = $scope.convertedDateLog_Month;
+			$scope.formData.Year = $scope.convertedDateLog_Year;
 
 
 			// console.log($scope.cnvrtdStartDate);
@@ -586,14 +594,22 @@ myApp.controller('MyCtrl',['$scope', '$http', '$filter',  '$interval', '$mdSiden
 			var csvRows = [];
 			csvRows.push(dataLogs[0].CurrentDate); 
 			console.log(dataLogs); 
-			
+			var stockData;
 			for(var i =0; i<dataLogs.length; i++) {
 
 				// console.log(dataLogs[i].CurrentDate);
 				// console.log(dataLogs[i].TimeIn);
 				// console.log(dataLogs[i].TimeOut);
 
-				csvRows.push("TimeIn	:" + dataLogs[i].TimeIn, "timeout:" + dataLogs[i].TimeOut);
+				csvRows.push([
+
+					"user: " + dataLogs[i].username ,
+					"TimeIn	:" + dataLogs[i].TimeIn, 
+					"timeout:" + dataLogs[i].TimeOut,
+					"HRS :" + dataLogs[i].NumbHrs,
+					"\n"
+				]);
+
 
 			}
 			

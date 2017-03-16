@@ -17,7 +17,8 @@ var UserSchema = new mongoose.Schema({
 	CurrentDate : String,
 	CurrentDateTime: String,
 	TimeIn : String,
-	TimeOut : String
+	TimeOut : String,
+	NumbHrs : String
 
 });
 

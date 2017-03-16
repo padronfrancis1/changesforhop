@@ -114,15 +114,28 @@
 
               <p>Or</p> -->
 
-              <md-input-container class="md-block">
+<!--               <md-input-container class="md-block">
                 <label>Employee Email</label>
 
                 <input type="text" name="empEmailTimeLog" ng-model="formData.empEmailTimeLog" />
 
 
               </md-input-container>
-
+ -->
               <md-input-container class="md-block">
+
+                <div style="display:inline-block; min-height:290px;">
+                  
+                  <div uib-datepicker ng-model="dt" class="well well-sm" datepicker-options="{minMode: 'month'}" datepicker-popup="MM/yyyy" datepicker-mode="'month'"></div>
+                </div>
+
+                <!-- <input type="text" class="form-control" datepicker-popup="MM/yyyy" ng-model="dt" is-open="opened" datepicker-options="{minMode: 'month'}" datepicker-mode="'month'"/>
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                </span> -->
+              </md-input-container>
+
+              <!-- <md-input-container class="md-block">
 
                 <input type="text" name="EmpInfoForDateLog" ng-model="formData.EmpInfoForDateLog" ng-disabled="true" ng-hide="true" />
 
@@ -134,21 +147,27 @@
                   </div>
                 </div>
 
-              </md-input-container>
+              </md-input-container> -->
 
 
-              <md-input-container class="md-block">
+              <!-- <md-input-container class="md-block">
 
                 <input date-range-picker class="form-control date-picker" type="text" ng-model="SelectedDate" />
 
               </md-input-container>
+              -->
+
+              <!-- <input type="text" class="form-control" datepicker-popup="MM/yyyy" ng-model="dt" is-open="opened" datepicker-options="{minMode: 'month'}" datepicker-mode="'month'"/>
+              <span class="input-group-btn">
+                  <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+              </span> -->
 
               <md-input-container>
-                <input type="text" name="startDate" ng-model="formData.startDate" ng-disabled="true" ng-hide="true" />
+                <input type="text" name="Month" ng-model="formData.Month" ng-disabled="true" ng-hide="true" />
               </md-input-container>
 
               <md-input-container>
-                <input type="text" name="endDate" ng-model="formData.endDate" ng-disabled="true" ng-hide="true" />
+                <input type="text" name="Year" ng-model="formData.Year" ng-disabled="true" ng-hide="true" />
               </md-input-container>
 
             </form>
@@ -192,11 +211,19 @@
                         </tr>
 
                         <tr md-row>
-                          <td md-cell>{{ info.TimeOut }}</td>
+                            <td md-cell><h4>{{ info.username }}</h4>
                         </tr>
 
                         <tr md-row style="border-bottom: 1px solid #333;">
-                          <td md-cell>{{ info.TimeIn }}</td>
+                          <td md-cell>Time In: {{ info.TimeIn }}</td>
+                        </tr>
+
+                        <tr md-row>
+                          <td md-cell>Time Out: {{ info.TimeOut }}</td>
+                        </tr>
+
+                        <tr md-row style="border-bottom: 1px solid #333;">
+                          <td md-cell>Number of Seconds Logged in: {{ info.NumbHrs }}</td>
                         </tr>
                       
                     </tbody>
