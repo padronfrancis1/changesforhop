@@ -44,11 +44,20 @@ return {
 
 myApp.controller('MyCtrl',['$scope', '$http', '$filter',  '$interval', '$mdSidenav', '$mdMedia', '$mdDialog','Upload', '$timeout', function ($scope, $http ,$filter, $interval, $mdSidenav, $mdMedia, $mdDialog, Upload, $timeout) {
 
+		// fab menu
+		$scope.isOpen = false;
+
+		$scope.demo = {
+		isOpen: false,
+		count: 0,
+		selectedDirection: 'left'
+		};
 
 
 		$scope.reloadRoute = function() {
 		   $route.reload();
 		}
+		//fab menu
 
 		
 		// side nav
@@ -123,6 +132,9 @@ myApp.controller('MyCtrl',['$scope', '$http', '$filter',  '$interval', '$mdSiden
 
         $scope.statusState = '';
         $scope.statuses = ('Approved Declined').split(' ').map(function (state) { return { abbrev: state }; });
+
+        $scope.permissionType = '';
+        $scope.permissions = ('Admin Regular').split(' ').map(function (state) { return { abbrev: state }; });
 
 		// Disable weekend selection
 		function disabled(data) {
@@ -261,7 +273,8 @@ myApp.controller('MyCtrl',['$scope', '$http', '$filter',  '$interval', '$mdSiden
 		$scope.userExist = true;
 		$scope.checkUserName = function(req, res) {
 			$scope.userExist = "";
-
+			
+			$scope.label = $scope.formData.username;
 			console.log("Checking username"); //username
 
 			$http.post('/checkUserName', $scope.formData).success(function(data){
@@ -275,8 +288,8 @@ myApp.controller('MyCtrl',['$scope', '$http', '$filter',  '$interval', '$mdSiden
 				//$scope.userExist = data;
 
 			});
-		}
-
+		};
+		
 		$scope.change = function() {
 			
 			$scope.formData.fnameu = $scope.info.FirstName;
@@ -367,6 +380,17 @@ myApp.controller('MyCtrl',['$scope', '$http', '$filter',  '$interval', '$mdSiden
 					
 					$scope.updateStatus = true;
 					$scope.AllClientsNav();
+					$scope.info = null;
+					$scope.formData.info = "";
+					$scope.formData.msg = "";
+					$scope.formData.fnameu = "";
+					$scope.formData.mnameu = "";
+					$scope.formData.lnameu = "";
+					$scope.formData.ageu = "";
+					$scope.formData.genderu = "";
+					$scope.formData.statusu = "";
+					//location.reload();
+
 				} else {
 					$scope.updateStatus = false;
 				}
@@ -592,26 +616,32 @@ myApp.controller('MyCtrl',['$scope', '$http', '$filter',  '$interval', '$mdSiden
 
 			var dataLogs = $scope.logs;
 			var csvRows = [];
-			csvRows.push(dataLogs[0].CurrentDate); 
-			console.log(dataLogs); 
+			//csvRows.push(dataLogs[0].CurrentDate); 
+			
 			var stockData;
 			for(var i =0; i<dataLogs.length; i++) {
 
-				// console.log(dataLogs[i].CurrentDate);
-				// console.log(dataLogs[i].TimeIn);
-				// console.log(dataLogs[i].TimeOut);
-
 				csvRows.push([
 
-					"user: " + dataLogs[i].username ,
-					"TimeIn	:" + dataLogs[i].TimeIn, 
-					"timeout:" + dataLogs[i].TimeOut,
-					"HRS :" + dataLogs[i].NumbHrs,
+					"user: " + " " + dataLogs[i].username ,
+					"TimeIn	:" + " " + dataLogs[i].TimeIn, 
+					"timeout:" + " " + dataLogs[i].TimeOut,
+					dataLogs[i].NumbHrs,
 					"\n"
+
 				]);
 
 
 			}
+
+			// for(var x = 0; x < csvRows.length; x ++)
+			// {
+			// 	console.log(csvRows[x].username);
+			// 	// if(csvRows[x].user =! csvRows[x - 1].user) {
+			// 	// 	console.log(csvRows[x].username);
+			// 	// 	console.log("not the same");
+			// 	// }
+			// }
 			
 			// for(var j=1; j<10; ++j){ 
 			//     A.push([j, Math.sqrt(j)]);
@@ -619,9 +649,9 @@ myApp.controller('MyCtrl',['$scope', '$http', '$filter',  '$interval', '$mdSiden
 
 			// var csvRows = [];
 
-			// for(var i=0, l=A.length; i<l; ++i){
-			//     csvRows.push(A[i].join(','));
-			// }
+			for(var i=0, l=csvRows.length; i<l; ++i){
+			    csvRows.push(csvRows[i].join(','));
+			}
 
 			var csvString = csvRows.join("%0A");
 			var a = document.createElement('a');

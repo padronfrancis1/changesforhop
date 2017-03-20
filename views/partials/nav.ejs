@@ -33,6 +33,7 @@
   </div>
 </div> 
 -->
+<!--
 <style>
 .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
     background-color: #fff;
@@ -62,7 +63,7 @@
   </div>
 
 </md-toolbar>
-
+-->
 
 <!--
 
@@ -83,3 +84,117 @@
    </md-menu-content>
  </md-menu>
 </md-menu-bar> -->
+<!--
+  <md-content class="md-padding">
+    <p>
+      You can use the fabToolbar with a trigger and regular toolbar.
+    </p>
+
+    <p>
+      You may use the <code>md-open</code> attribute to programmatically control whether or not the
+      control is open, and you may set the direction that the toolbar appears using the
+      <code>md-direction</code> attribute. This component currently supports the <code>left</code>
+      and <code>right</code> options.
+    </p>
+  </md-content>
+-->
+
+<!--
+  <md-fab-toolbar md-open="demo.isOpen" count="demo.count" md-direction="{{demo.selectedDirection}}">
+    <md-fab-trigger class="align-with-text">
+      <md-button aria-label="menu" class="md-fab md-primary">
+        <md-icon md-svg-src="img/icons/menu.svg"></md-icon>
+      </md-button>
+    </md-fab-trigger>
+
+    <md-toolbar>
+      <md-fab-actions class="md-toolbar-tools">
+        <md-button aria-label="comment" class="md-icon-button">
+          <md-icon md-svg-src="img/icons/ic_comment_24px.svg"></md-icon>
+        </md-button>
+        <md-button aria-label="label" class="md-icon-button">
+          <md-icon md-svg-src="img/icons/ic_label_24px.svg"></md-icon>
+        </md-button>
+        <md-button aria-label="photo" class="md-icon-button">
+          <md-icon md-svg-src="img/icons/ic_photo_24px.svg"></md-icon>
+        </md-button>
+      </md-fab-actions>
+    </md-toolbar>
+  </md-fab-toolbar>
+-->
+<!--
+  <md-content class="md-padding" layout="column">
+    <div layout="row" layout-align="space-around">
+      <div layout="column">
+        <b>Open/Closed</b>
+
+        <md-radio-group ng-model="demo.isOpen">
+          <md-radio-button ng-value="true">Open</md-radio-button>
+          <md-radio-button ng-value="false">Closed</md-radio-button>
+        </md-radio-group>
+      </div>
+
+      <div layout="column">
+        <b>Direction</b>
+
+        <md-radio-group ng-model="demo.selectedDirection">
+          <md-radio-button ng-value="'left'">Left</md-radio-button>
+          <md-radio-button ng-value="'right'">Right</md-radio-button>
+        </md-radio-group>
+      </div>
+    </div>
+  </md-content>
+  -->
+
+
+
+
+<div class="navbar-wrapper">
+  <div class="container" style="padding: 0px 0px;width: 100%;">
+
+    <nav class="navbar navbar-inverse navbar-static-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">Changes For Hope</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+
+            <li><a href="/">Home</a></li>
+
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Reports<span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="/reports">Daily Progress Reports</a></li>
+                <!--<li><a href="#">Incident Reports</a></li>-->
+              </ul>
+            </li>
+
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Profile<span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="/user">Edit My Profile</a></li>
+                <!--<li><a href="#">Incident Reports</a></li>-->
+              </ul>
+            </li>
+
+            <li><a href="/signup">Register Employee</a>
+            <li><a href="/adminPage">Admin Page</a></li>
+            <li><a href="/logout">Logout</a></li>
+
+
+
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+  </div>
+</div>
+

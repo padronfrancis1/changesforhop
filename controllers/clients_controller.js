@@ -144,7 +144,7 @@ exports.UpdateClient = function(req, res)
 			} else {
 				req.session.msg =  'User Updated';
 			}
-			res.redirect('/admin/view/client');
+			res.redirect('/clientsProfile');
 		});
 
 	});

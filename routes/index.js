@@ -155,27 +155,27 @@ router.get('/adminPage', function(req, res) {
 
 });
 
-router.get('/admin/view/client', function(req, res) {
+// router.get('/admin/view/client', function(req, res) {
 
 
-  if (req.session.username == "admin") {
+//   if (req.session.username == "admin") {
 
 
-    res.render('clientsProfile'); // ejs file
+//     res.render('clientsProfile'); // ejs file
 
-  } else {
+//   } else {
 
-    req.session.msg = 'Access denied!';
+//     req.session.msg = 'Access denied!';
 
-    res.redirect('/login');
+//     res.redirect('/login');
 
-  }
-
-
-});
+//   }
 
 
-router.get('/admin/add/client', function(req, res) {
+// });
+
+
+router.get('/addClient', function(req, res) {
 
 
   if (req.session.username == "admin") {
@@ -194,7 +194,7 @@ router.get('/admin/add/client', function(req, res) {
 
 });
 
-router.get('/view/clientsProfile', function(req, res, next) {
+router.get('/clientsProfile', function(req, res, next) {
 
   if (req.session.username == "admin") {
 

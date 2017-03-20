@@ -101,7 +101,6 @@
 
       <md-tab label="View Time Logs">
         <md-content layout-padding class="md-padding">
-
             <form name="EmpInfoForm">
 
               <!-- <md-input-container class="md-block">
@@ -173,10 +172,12 @@
             </form>
 
             <md-dialog-actions layout="row">
-              <md-button ng-click="ShowTimeLogs()" md-autofocus type="submit">
+              <md-button ng-click="ShowTimeLogs()" md-autofocus type="submit" class="md-primary md-raised">
                 Search Employee Log
               </md-button>
+              <md-button class="md-accent md-raised" ng-click="DownloadCSV()">Download as csv</md-button>
             </md-dialog-actions>
+
 
             <md-table-container>
 
@@ -206,9 +207,9 @@
                     
                     <tbody md-body>
                       
-                        <tr md-row>
+                        <!-- <tr md-row>
                             <td md-cell><h4>{{ info.CurrentDate }}</h4>
-                        </tr>
+                        </tr> -->
 
                         <tr md-row>
                             <td md-cell><h4>{{ info.username }}</h4>
@@ -223,7 +224,7 @@
                         </tr>
 
                         <tr md-row style="border-bottom: 1px solid #333;">
-                          <td md-cell>Number of Seconds Logged in: {{ info.NumbHrs }}</td>
+                          <td md-cell>Number of Minutes Logged in: {{ info.NumbHrs }}</td>
                         </tr>
                       
                     </tbody>
@@ -231,9 +232,7 @@
                   </table>
 
                 </div>
-                <md-content>
-                  <md-button class="md-accent md-raised" ng-click="DownloadCSV()">Download as csv</md-button>
-                </md-content>
+
               </div>
             </div>
             </md-table-container>

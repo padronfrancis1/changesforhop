@@ -10,8 +10,8 @@ var mongoose = require('mongoose'),
 exports.DownloadFile = function(res, req) {
 
 	console.log("API reached -- Download");
-	var uri = 'mongodb://admin:admin@ds145329.mlab.com:45329/changesforhope';
-	// var uri = 'mongodb://localhost/changesforhope';
+	// var uri = 'mongodb://admin:admin@ds145329.mlab.com:45329/changesforhope';
+	var uri = 'mongodb://localhost/changesforhope';
 
 	mongodb.MongoClient.connect(uri, function(error, db){
 		assert.ifError(error);
@@ -124,13 +124,13 @@ function admin(req, res) {
 	var date = new Date();
 
 	var currentDate = moment(date).format('M/D/YYYY');
-	var currentDateTime = moment(date).format('M/D/YYYY HH:mm:ss');
+	var currentDateTime = moment(date).format('M/D/YYYY-HH:mm:ss');
 	var currentTime = moment(date).format('h:mm:ss a');
 
 	var currentMonth = moment(date).format('M');
 	var currentYear = moment(date).format('YYYY');
 
-	var timeIn = new User(mongoose.model('User'));
+	
 
 
 	// 		console.log("You have an admin account");
@@ -140,7 +140,7 @@ function admin(req, res) {
 	// 		console.log(currentMonth);
 	// 		console.log(currentYear);
 	// 		console.log(currentTime);
-	console.log(currentDateTime);
+	console.log("This is the data" + currentDateTime);
 
 	User.findOne({ username: req.body.username }).exec(function(err, user) {
 
@@ -150,8 +150,7 @@ function admin(req, res) {
 
 		} else if (user.hashed_password === hashPW(req.body.password.toString())) {
 
-			
-
+			var timeIn = new User(mongoose.model('User'));
 			timeIn.set('username', req.body.username)
 			timeIn.set('email', user.email);
 			timeIn.set('CurrentDate', currentDate);
@@ -215,7 +214,7 @@ var user = function(req, res) {
 	var date = new Date();
 
 	var currentDate = moment(date).format('M/D/YYYY');
-	var currentDateTime = moment(date).format('M/D/YYYY HH:mm:ss');
+	var currentDateTime = moment(date).format('M/D/YYYY-HH:mm:ss');
 	var currentTime = moment(date).format('h:mm:ss a');
 
 	var currentMonth = moment(date).format('M');
@@ -230,6 +229,7 @@ var user = function(req, res) {
 
 		} else if (user.hashed_password === hashPW(req.body.password.toString())) {
 
+			var timeIn = new User(mongoose.model('User'));
 			timeIn.set('username', req.body.username)
 			timeIn.set('email', user.email);
 			timeIn.set('CurrentDate', currentDate);
@@ -315,7 +315,7 @@ exports.logoutUser = function(req, res) {
 
 	// var currentDate = moment(date).format('MMMM Do YYYY, h:mm:ss a');
 	var currentDate = moment(date).format('M/D/YYYY');
-	var currentTime = moment(date).format('M/D/YYYY HH:mm:ss');
+	var currentTime = moment(date).format('M/D/YYYY-HH:mm:ss');
 
 	var currentMonth = moment(date).format('M');
 	var currentYear = moment(date).format('YYYY');
@@ -348,37 +348,63 @@ exports.logoutUser = function(req, res) {
 			console.log("Current Date " + user.CurrentDate);
 			console.log("Time In " + user.TimeIn);
 			console.log("Time Out " + user.TimeOut);
-			console.log("Current Date Time " + user.CurrentDateTime);			
+			console.log("Current Date Time " + user.CurrentDateTime);	
 
+			// function diff_minutes(dt2, dt1) 
+			// {
 
-			// var NewTimeIn = new Date(separate_OutDate[0] + '-' + separate_OutDate[1] + '-' + separate_OutDate[2] + '-' + separate_OutTime[0] + '-' + separate_OutTime[1] + '-' + separate_OutTime[2]);
+			// var diff =(dt2.getTime() - dt1.getTime()) / 1000;
+			// diff /= 60;
+			// return Math.abs(Math.round(diff));
+
+			// }
+
 			var NewTimeIn = new Date(user.TimeIn)
 			console.log(NewTimeIn);
 
 			var NewTimeOut = new Date(currentTime)
 			console.log(NewTimeOut);
 
-			var numHrs = Math.abs(NewTimeIn - NewTimeOut) / 1000;
-			console.log(numHrs);
+
+			// var finalHrs = diff_minutes(NewTimeIn, NewTimeOut);
+			// console.log(finalHrs);
+
+			// get total seconds between the times
+			var delta = Math.abs(NewTimeOut - NewTimeIn) / 1000;
+
+			// calculate (and subtract) whole days
+			var days = Math.floor(delta / 86400);
+			delta -= days * 86400;
+
+			// calculate (and subtract) whole hours
+			var hours = Math.floor(delta / 3600) % 24;
+			delta -= hours * 3600;
+
+			// calculate (and subtract) whole minutes
+			var minutes = Math.floor(delta / 60) % 60;
+			delta -= minutes * 60;
+
+			// what's left is seconds
+			var seconds = delta % 60;  // in theory the modulus is not required
+
+
+			console.log(days, hours, minutes, seconds);
+
+			// var total = "days: " + days + " " + "hours: " + " " +  hours + " " + "minutes: " + " " + minutes + " " + "seconds: " + " " + seconds;
+			var total = hours + ":" + minutes + ":" + seconds;
+			console.log(total);
+
+
 
 			var userInstance = new User(mongoose.model('User'));
 
 			user.set('TimeOut', currentTime);
-			user.set('NumbHrs', numHrs);
-			
+			user.set('NumbHrs', total);
+
 			user.save(function(err){
 				if(err) {
 					console.log(err)
 				} else {
-
-
-					// console.log("updated")
-					// console.log("username " + user.username);
-					// console.log("user email " + user.email);
-					// console.log("month " + user.Month);
-					// console.log("year " + user.Year);
-					
-					// console.log("timeout " + user.TimeOut);
 					
 				}
 				//res.redirect('/user');
