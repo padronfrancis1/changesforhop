@@ -146,9 +146,9 @@
                   </md-input-container> -->
 
                   <md-input-container class="md-block">
-                    <md-select ng-model="permissiontype"
+                    <md-select ng-model="formData.permission"
                     placeholder="Enter Permission Type" 
-                    id="permissiontype" name="permissiontype" required minlength="2" maxlength="100">
+                    id="permission" name="permission" required minlength="2" maxlength="100">
 
                       <md-option ng-repeat="state in permissions" ng-value="state.abbrev">
                         {{state.abbrev}}

@@ -5,7 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-  <title>Dashboard</title>
+  <title>Admin Page</title>
 
   <!-- Bootstrap -->
   <!-- Latest compiled and minified CSS -->
@@ -13,7 +13,7 @@
 
   <!-- <link rel="stylesheet" href="/css/bootstrap.min.css" crossorigin="anonymous"> -->
 
-  <link rel="stylesheet" href="/css/bootstrap-3.3.7/dist/css/bootstrap.min.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="/css/bootstrap-3.3.7/dist/css/bootstrap.min.css" />
 
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
@@ -39,24 +39,22 @@
   <![endif]-->
 
 </head>
+  <body ng-controller="MyCtrl">
 
-  <body>
-  
+  <%- include partials/nav.ejs %>
 
-
-    <%- include partials/nav.ejs %>
-
-    <section ng-controller="MyCtrl" style="margin: 100px auto;">
-      <div class="container">
+    <section id="popupContainer">
+      <div class="container" style="width: 70%;margin: 100px auto;border: 0px solid #333;">
         <div class="row">
           <div class="col-md-12">
+
 
             <md-card>
              <!-- <img src="card-image.png" class="md-card-image" alt="image caption"> -->
              <md-card-content>
 
               
-              <h2>Welcome <%= username %></h2>
+              <h2>Changes for Hope Admin Page</h2>
               
 
                <!-- <p>What woulkd you like to do?</p> -->
@@ -64,27 +62,30 @@
 
               <md-card-content>
 
-                 <md-card-actions layout="row" layout-align="end center" >
+                <md-card-actions layout="row" layout-align="end center" >
 
-                    <md-button class="md-raised md-primary" href="/user"> Edit Profile </md-button>
-                    <md-button class="md-raised md-primary" href="/adminPage"> For admins only </md-button>
-                    <md-button class="md-raised md-primary" href="/reports"> Progress Reports </md-button>
-               </md-card-actions>
+                  <md-button class="md-raised md-primary" href="/addClient"> Add Client </md-button>
+                  <br>
+                  <md-button class="md-raised md-primary" href="/clientsProfile"> Search and Update Client Record </md-button>
+                  <br>
+                  <md-button class="md-raised md-primary" href="/reports"> Progress Reports </md-button>
+                  <br>
+                  <md-button class="md-raised md-primary" ng-click="showEmployeeLogsModal($event)"> View Time Logs </md-button>
+                  <br>
+                  <!-- <md-button class="md-raised md-primary" ng-click="showAdvanced($event)"> Searhc and Edit Employees </md-button> -->
+                </md-card-actions>
 
               </md-card-content>
 
             </md-card>
 
-            <hr>
-
-            <%= msg %>
-            
           </div>
         </div>
       </div>
 
     </section>
-  
+
+
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="/js/jquery-1.12.4.min.js"></script>
 

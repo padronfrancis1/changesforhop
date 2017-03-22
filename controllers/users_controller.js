@@ -10,8 +10,8 @@ var mongoose = require('mongoose'),
 exports.DownloadFile = function(res, req) {
 
 	console.log("API reached -- Download");
-	// var uri = 'mongodb://admin:admin@ds145329.mlab.com:45329/changesforhope';
-	var uri = 'mongodb://localhost/changesforhope';
+	var uri = 'mongodb://admin:admin@ds145329.mlab.com:45329/changesforhope';
+	// var uri = 'mongodb://localhost/changesforhope';
 
 	mongodb.MongoClient.connect(uri, function(error, db){
 		assert.ifError(error);
@@ -62,7 +62,7 @@ exports.signup = function(req, res) {
 
 	var user = new User(mongoose.model('User'));
 
-	user.set('username', req.body.username)
+	user.set('username', req.body.username);
 	user.set('hashed_password', hashPW(req.body.password));
 	user.set('FirstName', req.body.firstname);
 	user.set('MiddleName', req.body.middlename);
@@ -71,6 +71,8 @@ exports.signup = function(req, res) {
 	user.set('Address', req.body.address);
 	user.set('PermissionType', req.body.permission);
 	user.set('email', req.body.email);
+
+	console.log(req.body.permission);
 
 	user.save(function(err){
 
@@ -112,11 +114,117 @@ exports.signup = function(req, res) {
 
 exports.login = function(req, res) {
 
-	if( req.body.username == "admin") {
-		admin(req, res);
-	} else {
-		user(req, res);
-	}
+	// if( req.body.username == "admin") {
+	// 	admin(req, res);
+	// } else {
+	// 	user(req, res);
+	// }
+
+	var date = new Date();
+
+	var currentDate = moment(date).format('M/D/YYYY');
+	var currentDateTime = moment(date).format('M/D/YYYY-HH:mm:ss');
+	var currentTime = moment(date).format('h:mm:ss a');
+
+	var currentMonth = moment(date).format('M');
+	var currentYear = moment(date).format('YYYY');
+
+	
+
+
+	// 		console.log("You have an admin account");
+	// 		console.log(user.username);
+	// 		console.log(user.email);
+	// 		console.log(currentDate);
+	// 		console.log(currentMonth);
+	// 		console.log(currentYear);
+	// 		console.log(currentTime);
+	console.log("This is the data" + currentDateTime);
+
+	User.findOne({ username: req.body.username }).exec(function(err, user) {
+
+		if(!user) {
+
+			err = 'User not found.';
+
+		} else if (user.hashed_password === hashPW(req.body.password.toString())) {
+
+			var timeIn = new User(mongoose.model('User'));
+			timeIn.set('username', req.body.username)
+			timeIn.set('email', user.email);
+			timeIn.set('CurrentDate', currentDate);
+			timeIn.set('Year', currentYear);
+			timeIn.set('Month', currentMonth);
+			timeIn.set('TimeIn', currentDateTime);
+			timeIn.set('TimeOut', "NULL");
+			timeIn.set('CurrentDateTime', currentDateTime);
+
+
+			timeIn.save(function(err){
+
+				if(err) {
+
+					console.log("error");
+
+				} else {
+					console.log("inserted");
+					console.log(user.username);
+					console.log(user.email);
+					console.log(currentDate);
+					console.log(currentMonth);
+					console.log(currentYear);
+					console.log(currentTime);
+					console.log(currentDateTime);
+					
+				}
+			});
+
+
+			if( user.PermissionType == "Admin") {
+
+					req.session.regenerate(function() {
+					
+					req.session.user = user.id;
+					req.session.username = user.username;
+					req.session.email = user.email;
+					req.session.PermissionType = user.PermissionType;
+					req.session.msg = 'Authenticated as ' + user.username;
+
+					// res.redirect('/');
+					res.redirect('/adminPage');
+				});
+			} else {
+					req.session.regenerate(function() {
+						
+					req.session.user = user.id;
+					req.session.username = user.username;
+					req.session.email = user.email;
+					req.session.PermissionType = user.PermissionType;
+					req.session.msg = 'Authenticated as ' + user.username;
+
+					// res.redirect('/');
+					res.redirect('/');
+				});
+			}
+			
+
+
+		} else {
+
+			err = 'Authentication failed.';
+
+		}
+		if(err) {
+
+			req.session.regenerate(function(){
+				req.session.msg = err;
+				res.redirect('/login');
+			});
+
+		}
+	});
+
+
 };
 
 function admin(req, res) {
@@ -185,6 +293,7 @@ function admin(req, res) {
 				req.session.user = user.id;
 				req.session.username = user.username;
 				req.session.email = user.email;
+				req.session.PermissionType = user.PermissionType;
 				req.session.msg = 'Authenticated as ' + user.username;
 
 				// res.redirect('/');
@@ -266,6 +375,8 @@ var user = function(req, res) {
 				req.session.user = user.id;
 				req.session.username = user.username;
 				req.session.email = user.email;
+				req.session.PermissionType = user.PermissionType;
+				
 				req.session.msg = 'Authenticated as ' + user.username;
 
 				res.redirect('/');

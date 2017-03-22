@@ -22,6 +22,7 @@ require('./models/clients_model.js'); // ensures that document is registered in 
 require('./models/progressReports_model.js'); // ensures that document is registered in Mongo
 require('./models/UserTimeLogs.js'); // ensures that document is registered in Mongo
 require('./models/file_model.js'); // ensures that document is registered in Mongo
+require('./models/incidentReports_model.js'); // ensures that document is registered in Mongo
 
 //var conn = mongoose.connect('mongodb://localhost/changesforhope');
 mongoose.Promise = global.Promise;

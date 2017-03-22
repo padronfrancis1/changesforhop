@@ -138,8 +138,8 @@ router.get('/logout', users.logoutUser, function(req, res, next) {
 
 router.get('/adminPage', function(req, res) {
 
-
-  if (req.session.username == "admin") {
+  console.log(req.session.PermissionType);
+  if (req.session.PermissionType = "Admin") {
 
 
     res.render('adminpage'); // ejs file
@@ -181,7 +181,8 @@ router.get('/addClient', function(req, res) {
   if (req.session.username == "admin") {
 
 
-    res.render('adminAddClient'); // ejs file
+    //res.render('adminAddClient'); // ejs file
+    res.redirect('/');
 
   } else {
 
