@@ -15,7 +15,15 @@ var progressReports = new mongoose.Schema({
 	SchoolHomework: String,
 	AWOLContact: String,
 	ProgressGoals: String,
-	CreatedBy: String
+	CreatedBy: String,
+
+	Month: String,
+	Day: String,
+	Year: String,
+	DateTime: String,
+	Incident: String,
+	Actions: String,
+	Type: String
 
 
 });

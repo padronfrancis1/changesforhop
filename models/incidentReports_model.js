@@ -9,9 +9,11 @@ var incidentReports = new mongoose.Schema({
 	Month: String,
 	Day: String,
 	Year: String,
-	Time: String,
-	Incidet: String,
-	CreatedBy: String
+	DateTime: String,
+	Incident: String,
+	Actions: String,
+	CreatedBy: String,
+	Type: String
 
 
 });

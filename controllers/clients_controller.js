@@ -1,7 +1,13 @@
 var mongoose = require('mongoose'),
-		Clients = mongoose.model('clients')
-		progressReports = mongoose.model('progressReports')
+		Clients = mongoose.model('clients'),
+		IncidentReports = mongoose.model('incidentReports'),
+		progressReports = mongoose.model('progressReports');
 		
+
+var moment = require('moment');
+		
+
+
 
 exports.AddClient = function(req, res) 
 {
@@ -212,6 +218,8 @@ exports.ViewProgressReport = function(req, res)
 		var response = str.substring(0,12);
 		console.log(response);
 
+
+
 		progressReports.find({ FirstName: req.body.fnames, MiddleName: req.body.mnames, LastName: req.body.lnames, Date: new RegExp(response, 'i') }).exec(function(err, progressReport) {
 
 		if(progressReport)
@@ -251,3 +259,131 @@ exports.ViewProgressReportSpecific = function(req, res)
 	});
 }
 
+
+exports.AddIncidentReport = function(req, res) 
+{
+	
+
+	Clients.findOne({ FirstName: req.body.fnames, MiddleName: req.body.mnames, LastName: req.body.lnames }).exec(function(err, client) {
+
+		if(client)
+		{
+			var date = new Date();
+
+			var currentDate = moment(date).format('M/D/YYYY');
+			var currentDateTime = moment(date).format('M/D/YYYY-HH:mm:ss');
+			var currentTime = moment(date).format('h:mm:ss a');
+
+			var currentMonth = moment(date).format('M');
+			var currentYear = moment(date).format('YYYY');
+			var currentDay = moment(date).format('D');
+
+
+			var IncidentReports = new progressReports(mongoose.model('progressReports'));
+			
+			IncidentReports.set('FirstName', req.body.fnames);
+			IncidentReports.set('LastName', req.body.lnames);
+			IncidentReports.set('MiddleName', req.body.mnames);
+
+			IncidentReports.set('DateTime', currentDateTime);
+			IncidentReports.set('Month', currentMonth);
+			IncidentReports.set('Day', currentDay);
+			IncidentReports.set('Year', currentYear);
+
+			IncidentReports.set('Incident', req.body.incident);
+			IncidentReports.set('Actions', req.body.action);
+			IncidentReports.set('CreatedBy', req.session.username);
+
+			IncidentReports.set('Type', "Incident");
+
+			// console.log(req.body.fnames);
+			// console.log(req.body.lnames);
+			// console.log(req.body.mnames);
+			// console.log(req.body.incident);
+			console.log(req.body.action);
+			// console.log(req.session.username);
+			// console.log(currentDateTime);
+			// console.log(currentMonth);
+			// console.log(currentYear);
+			// console.log(currentDay);
+			// console.log("Incident");
+
+
+			IncidentReports.save(function(err, success){
+
+				if(err) {
+
+					console.log("not inserted");
+
+
+				} else {
+					console.log("Successful Progress Report Add");
+
+
+				}
+			});
+
+
+
+		}else{
+			console.log(err);
+		}
+
+	});
+}
+
+
+exports.ViewIncidentReport = function(req, res) 
+{
+	
+		console.log("I got the Incident Report Request View");
+	// progressReports.find({ FirstName: req.body.fnames, MiddleName: req.body.mnames, LastName: req.body.lnames }).exec(function(err, progressReport) {
+		// progressReports.find({ FirstName: req.body.fnames, MiddleName: req.body.mnames, LastName: req.body.lnames, Date: new RegExp('Feb', 'i') }).exec(function(err, progressReport) {
+		var month = req.body.Month;
+		var year = req.body.Year;
+
+
+		console.log(month);
+		console.log(year);
+
+
+		progressReports.find({ Type: 'Incident', Month: month, Year: year }).exec(function(err, incidentReport) {
+
+		if(incidentReport)
+		{
+
+			console.log(incidentReport);
+			res.json(incidentReport);
+
+		}else {
+			console.log("No Records Found");
+		}
+
+		});
+}
+
+
+exports.ViewIncidentReportSpecific = function(req, res) 
+{
+	
+	console.log("Specificcccccccccccccccccc");
+	console.log(req.body.fnames);
+	console.log(req.body.mnames);
+	console.log(req.body.lnames);
+	console.log(req.body.incidentReport_SpecificDate);
+	
+	// progressReports.find({ FirstName: req.body.fnames, MiddleName: req.body.mnames, LastName: req.body.lnames, DateTime: req.body.incidentReport_SpecificDate }).exec(function(err, incidentReportSpecific) {
+	progressReports.find({DateTime: req.body.incidentReport_SpecificDate}).exec(function(err, incidentReportSpecific) {
+
+		if(incidentReportSpecific)
+		{
+
+			console.log(incidentReportSpecific);
+			res.json(incidentReportSpecific);
+
+		}else{
+			console.log("Progress Report Not Found");
+		}
+
+	});
+}

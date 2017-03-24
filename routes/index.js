@@ -96,6 +96,22 @@ router.get('/reports', function(req, res, next) {
 
 });
 
+router.get('/IncidentReports', function(req, res, next) {
+  
+  if (req.session.user) {
+
+    res.render('incident');
+
+  } else {
+
+    req.session.msg = 'Access denied!';
+
+    res.redirect('/login');
+
+  }
+
+});
+
 
 
 router.get('/signup', function(req, res, next) {
@@ -236,9 +252,15 @@ router.post('/client/update', clients.UpdateClient); // working
 router.get('/client/source', clients.ListAllClient); // json source select all 
 router.post('/admin/add/client', clients.AddClient);
 
+// Progress Report
 router.post('/employee/client/AddProgressReport', clients.AddProgressReport);
 router.post('/employee/client/ViewProgressReport', clients.ViewProgressReport);
 router.post('/employee/client/ViewProgressReportSpecific', clients.ViewProgressReportSpecific);
+
+//Incident Report
+router.post('/AddIncidentReport', clients.AddIncidentReport);
+router.post('/ViewIncidentReport', clients.ViewIncidentReport);
+router.post('/ViewIncidentReportSpecific', clients.ViewIncidentReportSpecific);
 
 router.post('/employee/view/timeLogs', users.ViewTimeLogs);
 router.post('/employee/view/empInfo', users.SearchEmpInfo);

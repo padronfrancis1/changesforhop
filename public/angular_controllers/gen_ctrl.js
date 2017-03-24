@@ -338,6 +338,9 @@ myApp.controller('MyCtrl',['$scope', '$http', '$filter',  '$interval', '$mdSiden
 			});
 		}
 
+
+
+
 		// $scope.ViewProgressReportSpecific = function(req, res) {
 
 		// 	$http.post('/employee/client/ViewProgressReportSpecific', $scope.formData).success(function(data){
@@ -421,6 +424,72 @@ myApp.controller('MyCtrl',['$scope', '$http', '$filter',  '$interval', '$mdSiden
 
 			});
 		}
+
+		$scope.AddIncidentReport = function(req, res) {
+
+
+			$http.post('/AddIncidentReport', $scope.formData).success(function(data){
+
+				if(data) {
+
+					$scope.incidentReportAdd = data;
+					
+				} else {
+
+					console.log("Incident Report not Added");
+
+				}
+				
+
+			});
+		}
+
+		$scope.ViewIncidentReport = function(req, res) {
+
+			// $scope.logs = "";
+			$scope.formData = {};
+
+			$scope.convertedDateLog_Month = $filter('date')($scope.dt, 'M');
+			$scope.convertedDateLog_Year = $filter('date')($scope.dt, 'yyyy');
+
+			console.log($scope.convertedDateLog_Month);
+			console.log($scope.convertedDateLog_Year);
+
+
+			$scope.formData.Month = $scope.convertedDateLog_Month;
+			$scope.formData.Year = $scope.convertedDateLog_Year;
+
+
+			$http.post('/ViewIncidentReport', $scope.formData).success(function(data){
+
+				if(data) {
+
+					$scope.incidentReportSearch = data;
+					
+				} else {
+
+					console.log("Incident Report not Added");
+
+				}
+				
+
+			});
+		}
+
+		$scope.ViewIncidentReportSpecific = function(date) {
+
+			// $scope.formData = {};
+			$scope.formData.incidentReport_SpecificDate = date;
+			console.log(date);
+			console.log($scope.formData.incidentReport_SpecificDate);
+
+			$http.post('/ViewIncidentReportSpecific', $scope.formData).success(function(data){
+				console.log(data);
+				$scope.incidentReportSpecificresult = data;
+			});
+		}
+
+
 
 
 		$scope.status = '  ';
@@ -532,6 +601,8 @@ myApp.controller('MyCtrl',['$scope', '$http', '$filter',  '$interval', '$mdSiden
 
 			});
 		}
+
+
 
 
 
