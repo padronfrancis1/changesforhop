@@ -74,11 +74,21 @@ myApp.controller('MyCtrl',['$scope', '$http', '$filter',  '$interval', '$mdSiden
 		$scope.uploadFile = function(){
 
 	        var file = $scope.myFile;
+	        var permissionFile = $scope.signUpForm.FilePermission;
+
 	        var uploadUrl = "/multer";
 	        var fd = new FormData();
-	        fd.append('file', file);
+	        // fd.append('username', 'Chris');
+	        fd.append('file', file, file.name + "_" + permissionFile);
 
-	        $http.post(uploadUrl,fd, {
+	        
+
+	        for (var key of fd.entries()) {
+		        console.log(key[0] + ', ' + key[1]);
+		    }
+
+
+	        $http.post(uploadUrl, fd, {
 	            transformRequest: angular.identity,
 	            headers: {'Content-Type': undefined}
 	        })
@@ -136,6 +146,10 @@ myApp.controller('MyCtrl',['$scope', '$http', '$filter',  '$interval', '$mdSiden
         $scope.permissionType = '';
         $scope.permissions = ('Admin Regular').split(' ').map(function (state) { return { abbrev: state }; });
 
+        $scope.permissionTypeFile = '';
+        $scope.FilePermission = ('Rglr Admn').split(' ').map(function (state) { return { abbrev: state }; });
+
+     
 		// Disable weekend selection
 		function disabled(data) {
 			var date = data.date,
@@ -409,11 +423,13 @@ myApp.controller('MyCtrl',['$scope', '$http', '$filter',  '$interval', '$mdSiden
 			$scope.converted_date = $filter('date')($scope.clock, 'medium'); // for conversion to string
 			$scope.formData.progressReport_date = $scope.converted_date;
 
-			$http.post('/employee/client/AddProgressReport', $scope.formData).success(function(data){
+			$http.post('/AddProgressReport', $scope.formData).success(function(data){
 
 				if(data) {
 
 					$scope.progressReport = data;
+					$window.location.reload();
+
 					
 				} else {
 
@@ -423,6 +439,7 @@ myApp.controller('MyCtrl',['$scope', '$http', '$filter',  '$interval', '$mdSiden
 				
 
 			});
+
 		}
 
 		$scope.AddIncidentReport = function(req, res) {
@@ -434,6 +451,8 @@ myApp.controller('MyCtrl',['$scope', '$http', '$filter',  '$interval', '$mdSiden
 
 					$scope.incidentReportAdd = data;
 					
+					$location.path('/AddIncidentReport');
+					
 				} else {
 
 					console.log("Incident Report not Added");
@@ -442,6 +461,7 @@ myApp.controller('MyCtrl',['$scope', '$http', '$filter',  '$interval', '$mdSiden
 				
 
 			});
+			$location.path('/AddIncidentReport');
 		}
 
 		$scope.ViewIncidentReport = function(req, res) {

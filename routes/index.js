@@ -13,18 +13,52 @@ var mongodb = require('mongodb');
 
 var multer  = require('multer');
 
+// var storage = require('multer-gridfs-storage')({
+//    // url: 'mongodb://admin:admin@ds145329.mlab.com:45329/changesforhope'
+//    url: 'mongodb://localhost/changesforhope'
+// });
+
+var path = require('path');
+
 var storage = require('multer-gridfs-storage')({
-   url: 'mongodb://admin:admin@ds145329.mlab.com:45329/changesforhope'
-   // url: 'mongodb://localhost/changesforhope'
+  url: 'mongodb://admin:admin@ds145329.mlab.com:45329/changesforhope',
+  // url: 'mongodb://localhost/changesforhope',
+   filename: function(req, file, cb) {
+
+       crypto.randomBytes(16, function (err, raw) {
+           // cb(err, err ? undefined : raw.toString('hex') + path.extname(file.originalname));
+
+           var orgnlFilename = file.originalname;
+           var trimmed_orgnlFilename = orgnlFilename.slice(0, -5);
+           console.log(trimmed_orgnlFilename);
+
+           cb(err, err ? undefined : trimmed_orgnlFilename);
+           
+           console.log(file);
+
+           //console.log(cb);
+       });
+   }
+   ,
+   metadata: function(req, file, cb) {
+      var originalname = file.originalname;
+
+      var trimFileType = originalname.slice(-5);
+      
+      cb(null, { permission: trimFileType });
+   }
 });
 
 
 
+
 var upload = multer({ storage: storage });
+
 var sUpload = upload.single('file');
+
 router.post('/multer', sUpload, function (req, res, next) { 
-    /*....*/ 
-    console.log(req.file);
+
+    
     res.redirect('/');
 })
 
@@ -197,8 +231,7 @@ router.get('/addClient', function(req, res) {
   if (req.session.username == "admin") {
 
 
-    //res.render('adminAddClient'); // ejs file
-    res.redirect('/');
+    res.render('adminAddClient'); // ejs file
 
   } else {
 
@@ -226,7 +259,13 @@ router.get('/clientsProfile', function(req, res, next) {
 
   }
 
-});
+}); //date_incident
+
+router.get('/download', function(req, res, next) {
+
+res.render('DownloadUpload');
+
+}); //date_incident
 
 // router.get('/signup', function(req, res, next) {
 
@@ -253,7 +292,8 @@ router.get('/client/source', clients.ListAllClient); // json source select all
 router.post('/admin/add/client', clients.AddClient);
 
 // Progress Report
-router.post('/employee/client/AddProgressReport', clients.AddProgressReport);
+//router.post('/employee/client/AddProgressReport', clients.AddProgressReport);
+router.post('/AddProgressReport', clients.AddProgressReport);
 router.post('/employee/client/ViewProgressReport', clients.ViewProgressReport);
 router.post('/employee/client/ViewProgressReportSpecific', clients.ViewProgressReportSpecific);
 
@@ -267,7 +307,7 @@ router.post('/employee/view/empInfo', users.SearchEmpInfo);
 router.post('/checkUserName', users.checkUserName);
 
 // router.post('/multer', users.UploadFiles);
-router.get('/download', users.DownloadFile);
+//router.get('/download', users.DownloadFile);
 router.get('/multer', users.ListFiles);
 // router.get('/SearchFiles', users.SearchFile);
 

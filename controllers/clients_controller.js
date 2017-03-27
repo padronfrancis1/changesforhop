@@ -84,10 +84,6 @@ exports.ListAllClient = function(req, res)
 
 };
 
-// This will be the source
-// create another function that updates the info and another page to put the info before updateing
-
-
 
 exports.GetClientProfile = function(req, res) 
 {
@@ -172,8 +168,10 @@ exports.AddProgressReport = function(req, res)
 			progressReport.set('FirstName', req.body.fnames);
 			progressReport.set('LastName', req.body.lnames);
 			progressReport.set('MiddleName', req.body.mnames);
+
 			progressReport.set('Date', req.body.progressReport_date);
 			progressReport.set('Time', req.body.progressReport_time);
+
 			progressReport.set('Hygiene', req.body.progressReport_hygiene);
 			progressReport.set('HealthMedication', req.body.progressReport_healthmed);
 			progressReport.set('Nutrition', req.body.progressReport_nutrition);
@@ -194,6 +192,7 @@ exports.AddProgressReport = function(req, res)
 				} else {
 					console.log("Successful Progress Report Add");
 					console.log(success);
+					//res.redirect('/reports');
 
 				}
 			});
@@ -203,7 +202,7 @@ exports.AddProgressReport = function(req, res)
 		}
 
 	});
-}
+};
 
 exports.ViewProgressReport = function(req, res) 
 {
@@ -233,7 +232,7 @@ exports.ViewProgressReport = function(req, res)
 		}
 
 	});
-}
+};
 
 exports.ViewProgressReportSpecific = function(req, res) 
 {
@@ -257,26 +256,26 @@ exports.ViewProgressReportSpecific = function(req, res)
 		}
 
 	});
-}
+};
 
 
 exports.AddIncidentReport = function(req, res) 
 {
-	
+
 
 	Clients.findOne({ FirstName: req.body.fnames, MiddleName: req.body.mnames, LastName: req.body.lnames }).exec(function(err, client) {
 
 		if(client)
 		{
-			var date = new Date();
+			var date_incident = new Date();
 
-			var currentDate = moment(date).format('M/D/YYYY');
-			var currentDateTime = moment(date).format('M/D/YYYY-HH:mm:ss');
-			var currentTime = moment(date).format('h:mm:ss a');
+			var currentDate = moment(date_incident).format('M/D/YYYY');
+			var currentDateTime = moment(date_incident).format('M/D/YYYY-HH:mm:ss');
+			var currentTime = moment(date_incident).format('h:mm:ss a');
 
-			var currentMonth = moment(date).format('M');
-			var currentYear = moment(date).format('YYYY');
-			var currentDay = moment(date).format('D');
+			var currentMonth = moment(date_incident).format('M');
+			var currentYear = moment(date_incident).format('YYYY');
+			var currentDay = moment(date_incident).format('D');
 
 
 			var IncidentReports = new progressReports(mongoose.model('progressReports'));
@@ -300,12 +299,7 @@ exports.AddIncidentReport = function(req, res)
 			// console.log(req.body.lnames);
 			// console.log(req.body.mnames);
 			// console.log(req.body.incident);
-			console.log(req.body.action);
-			// console.log(req.session.username);
-			// console.log(currentDateTime);
-			// console.log(currentMonth);
-			// console.log(currentYear);
-			// console.log(currentDay);
+
 			// console.log("Incident");
 
 
@@ -314,10 +308,19 @@ exports.AddIncidentReport = function(req, res)
 				if(err) {
 
 					console.log("not inserted");
+					//mongoose.connection.close();
 
 
 				} else {
 					console.log("Successful Progress Report Add");
+					console.log(req.body.action);
+					// console.log(req.session.username);
+					console.log(currentDateTime);
+					console.log(currentMonth);
+					console.log(currentYear);
+					console.log(currentDay);
+					res.redirect('/IncidentReports');
+					//mongoose.connection.close();
 
 
 				}
@@ -325,18 +328,22 @@ exports.AddIncidentReport = function(req, res)
 
 
 
+
+
 		}else{
 			console.log(err);
+			
 		}
 
 	});
-}
+
+
+};
 
 
 exports.ViewIncidentReport = function(req, res) 
 {
 	
-		console.log("I got the Incident Report Request View");
 	// progressReports.find({ FirstName: req.body.fnames, MiddleName: req.body.mnames, LastName: req.body.lnames }).exec(function(err, progressReport) {
 		// progressReports.find({ FirstName: req.body.fnames, MiddleName: req.body.mnames, LastName: req.body.lnames, Date: new RegExp('Feb', 'i') }).exec(function(err, progressReport) {
 		var month = req.body.Month;
@@ -360,13 +367,12 @@ exports.ViewIncidentReport = function(req, res)
 		}
 
 		});
-}
+};
 
 
 exports.ViewIncidentReportSpecific = function(req, res) 
 {
-	
-	console.log("Specificcccccccccccccccccc");
+
 	console.log(req.body.fnames);
 	console.log(req.body.mnames);
 	console.log(req.body.lnames);
@@ -386,4 +392,4 @@ exports.ViewIncidentReportSpecific = function(req, res)
 		}
 
 	});
-}
+};
