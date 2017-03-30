@@ -6,36 +6,13 @@ var mongoose = require('mongoose'),
 	UserTimeLogs = mongoose.model('UserTimeLogs');
 
 
+exports.DownloadFile = function(req, res) {
+	console.log("API REACHED");
 
-exports.DownloadFile = function(res, req) {
 
-	console.log("API reached -- Download");
-	var uri = 'mongodb://admin:admin@ds145329.mlab.com:45329/changesforhope';
-	// var uri = 'mongodb://localhost/changesforhope';
 
-	mongodb.MongoClient.connect(uri, function(error, db){
-		assert.ifError(error);
-		if(error) {
-			console.log(error);
-		} else {
-			console.log(db);
-			var bucket = new mongodb.GridFSBucket(db,{ bucketname: 'changesforhopefiles'});
-
-			bucket.openDownloadStreamByName('sourcefile.pdf').
-			  pipe(fs.createWriteStream('./out.pdf')).
-			  on('error', function(error) {
-			    assert.ifError(error);
-			  }).
-			  on('finish', function() {
-			    console.log('downloaded!');
-			    // process.exit(0);
-			  });
-
-			}
-		});
 
 };
-
 
 
 var moment = require('moment');

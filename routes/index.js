@@ -12,55 +12,118 @@ var mongodb = require('mongodb');
 /* employee logic layer */
 
 var multer  = require('multer');
+var uri = 'mongodb://admin:admin@ds145329.mlab.com:45329/changesforhope'
+// var uri = 'mongodb://localhost:27017/changesforhope';
+var assert = require('assert');
+var fs = require('fs');
+var mongodb = require('mongodb');
 
 // var storage = require('multer-gridfs-storage')({
 //    // url: 'mongodb://admin:admin@ds145329.mlab.com:45329/changesforhope'
 //    url: 'mongodb://localhost/changesforhope'
 // });
 
+
+
+
+
+
 var path = require('path');
 
 var storage = require('multer-gridfs-storage')({
   url: 'mongodb://admin:admin@ds145329.mlab.com:45329/changesforhope',
   // url: 'mongodb://localhost/changesforhope',
+
+  // root: 'myfiles',
    filename: function(req, file, cb) {
 
        crypto.randomBytes(16, function (err, raw) {
-           // cb(err, err ? undefined : raw.toString('hex') + path.extname(file.originalname));
 
            var orgnlFilename = file.originalname;
            var trimmed_orgnlFilename = orgnlFilename.slice(0, -5);
            console.log(trimmed_orgnlFilename);
 
            cb(err, err ? undefined : trimmed_orgnlFilename);
-           
-           console.log(file);
 
-           //console.log(cb);
        });
-   }
-   ,
+   },
    metadata: function(req, file, cb) {
       var originalname = file.originalname;
 
       var trimFileType = originalname.slice(-5);
       
       cb(null, { permission: trimFileType });
-   }
+   },
+   root: 'storage'
+});
+
+var upload = multer({ storage: storage });
+var sUpload = upload.single('file');
+
+router.post('/multer', sUpload, function (req, res, next) { 
+    res.redirect('/');
 });
 
 
 
 
-var upload = multer({ storage: storage });
+// router.post('/mongoUpload', function(req, res){
 
-var sUpload = upload.single('file');
+//   console.log(req.body.labelFile);
 
-router.post('/multer', sUpload, function (req, res, next) { 
+//   mongodb.MongoClient.connect(uri, function(error, db) {
+//     assert.ifError(error);
 
-    
-    res.redirect('/');
-})
+//     var bucket = new mongodb.GridFSBucket(db, {
+//       chunkSizeBytes: 1024,
+//       bucketName: 'cfhfiles'
+//     });
+
+//     fs.createReadStream('C:/Users/Francis/Desktop/ChangesForHope_v2/' + req.body.labelFile, 'metadata').
+//       pipe(bucket.openUploadStream(req.body.labelFile)).
+//       on('error', function(error) {
+//         assert.ifError(error);
+//       }).
+//       on('finish', function() {
+//         console.log('done!');
+//         //process.exit(0);
+//         res.redirect('/DownloadUpload');
+//       });
+
+
+//   });
+
+// });
+
+
+router.post('/mongoDownload', function(res, req){
+
+
+
+mongodb.MongoClient.connect(uri, function(error, db) {
+  assert.ifError(error);
+
+  var bucket = new mongodb.GridFSBucket(db, {
+    //chunkSizeBytes: 1024,
+    bucketName: 'storage'
+  });
+
+  bucket.openDownloadStreamByName('users.js').
+    pipe(fs.createWriteStream('./users.js')).
+    on('error', function(error) {
+      assert.ifError(error);
+    }).
+    on('finish', function() {
+      console.log('done!');
+      //process.exit(0);
+    });
+
+  });
+
+
+});
+
+
 
 
 
@@ -228,7 +291,7 @@ router.get('/adminPage', function(req, res) {
 router.get('/addClient', function(req, res) {
 
 
-  if (req.session.username == "admin") {
+  if (req.session.PermissionType = "Admin") {
 
 
     res.render('adminAddClient'); // ejs file
@@ -246,7 +309,7 @@ router.get('/addClient', function(req, res) {
 
 router.get('/clientsProfile', function(req, res, next) {
 
-  if (req.session.username == "admin") {
+  if (req.session.PermissionType = "Admin") {
 
 
     res.render('clientsProfile'); // ejs file
@@ -261,11 +324,11 @@ router.get('/clientsProfile', function(req, res, next) {
 
 }); //date_incident
 
-router.get('/download', function(req, res, next) {
+// router.get('/download', function(req, res, next) {
 
-res.render('DownloadUpload');
+// res.render('DownloadUpload');
 
-}); //date_incident
+// }); //date_incident
 
 // router.get('/signup', function(req, res, next) {
 
@@ -307,7 +370,7 @@ router.post('/employee/view/empInfo', users.SearchEmpInfo);
 router.post('/checkUserName', users.checkUserName);
 
 // router.post('/multer', users.UploadFiles);
-//router.get('/download', users.DownloadFile);
+router.post('/download', users.DownloadFile);
 router.get('/multer', users.ListFiles);
 // router.get('/SearchFiles', users.SearchFile);
 

@@ -81,12 +81,6 @@ myApp.controller('MyCtrl',['$scope', '$http', '$filter',  '$interval', '$mdSiden
 	        // fd.append('username', 'Chris');
 	        fd.append('file', file, file.name + "_" + permissionFile);
 
-	        
-
-	        for (var key of fd.entries()) {
-		        console.log(key[0] + ', ' + key[1]);
-		    }
-
 
 	        $http.post(uploadUrl, fd, {
 	            transformRequest: angular.identity,
@@ -144,7 +138,7 @@ myApp.controller('MyCtrl',['$scope', '$http', '$filter',  '$interval', '$mdSiden
         $scope.statuses = ('Approved Declined').split(' ').map(function (state) { return { abbrev: state }; });
 
         $scope.permissionType = '';
-        $scope.permissions = ('Admin Regular').split(' ').map(function (state) { return { abbrev: state }; });
+        $scope.permissions = ('Admin Staff').split(' ').map(function (state) { return { abbrev: state }; });
 
         $scope.permissionTypeFile = '';
         $scope.FilePermission = ('Rglr Admn').split(' ').map(function (state) { return { abbrev: state }; });
@@ -228,59 +222,90 @@ myApp.controller('MyCtrl',['$scope', '$http', '$filter',  '$interval', '$mdSiden
 			});
 		}
 
-		$scope.uploadPic = function(file) {
-		    file.upload = Upload.upload({
-		      url: '/files',
-		      data: {file: file},
-		    });
+		// $scope.uploadPic = function(file) {
+		//     file.upload = Upload.upload({
+		//       url: '/files',
+		//       data: {file: file},
+		//     });
 
-		    file.upload.then(function (response) {
-		      $timeout(function () {
-		        file.result = response.data;
-		      });
-		    }, function (response) {
-		      if (response.status > 0)
-		        $scope.errorMsg = response.status + ': ' + response.data;
-		    }, function (evt) {
-		      // Math.min is to fix IE which reports 200% sometimes
-		      file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
-		    });
-	    }
+		//     file.upload.then(function (response) {
+		//       $timeout(function () {
+		//         file.result = response.data;
+		//       });
+		//     }, function (response) {
+		//       if (response.status > 0)
+		//         $scope.errorMsg = response.status + ': ' + response.data;
+		//     }, function (evt) {
+		//       // Math.min is to fix IE which reports 200% sometimes
+		//       file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+		//     });
+	 //    }
 
-		$scope.onFileSelect = function($files) {
-		// $files: an array of files selected, each file has name, size, and type.
-			for (var i = 0; i < $files.length; i++) {
+		// $scope.onFileSelect = function($files) {
+		// // $files: an array of files selected, each file has name, size, and type.
+		// 	for (var i = 0; i < $files.length; i++) {
 
-			  var $file = $files[i];
-			  $upload.upload({
-			    url: '/files',
-			    file: $file,
-			    progress: function(e){}
-			  }).then(function(data, status, headers, config) {
-			    // file is uploaded successfully
-					console.log("angular");
+		// 	  var $file = $files[i];
+		// 	  $upload.upload({
+		// 	    url: '/files',
+		// 	    file: $file,
+		// 	    progress: function(e){}
+		// 	  }).then(function(data, status, headers, config) {
+		// 	    // file is uploaded successfully
+		// 			console.log("angular");
 			    
-			    console.log(data);
-			  }); 
-			}
-		}
+		// 	    console.log(data);
+		// 	  }); 
+		// 	}
+		// }
 
 
-		$scope.UploadFiles = function(res, req) {
-			console.log("Add File");
-			$http.post('/files').success(function(data){
 
-			});
+		// $scope.UploadFiles = function(res, req) {
+		// 	console.log("Add File");
+
+		// 	//console.log($scope.formData.UploadFile);
+		// 	var fu1 = document.getElementById("UploadFile");
+		// 	var permissionFile = $scope.signUpForm.FilePermission;
+
+		// 	// console.log(fu1.value);
+		// 	var str = fu1.value;
+		// 	var res = str.slice(12);
+
+		// 	$scope.labelFile = res;
+
 			
-		};
+
+
+		// 	$scope.DownloadUplaod.labelFile = $scope.labelFile;
+		// 	console.log($scope.DownloadUplaod.labelFile);
+
+			
+		// 	//alert("You selected " + fu1.value);
+
+		// 	$http.post('/mongoUpload', $scope.DownloadUplaod).success(function(data){
+
+		// 	});
+			
+		// };
 
 		$scope.DownloadFile = function(res, req) {
 			console.log("Download File");
-			$http.get('/download').success(function(data){
-
+			$http.post('/mongoDownload').success(function(data){
+				console.log(data);
 			});
 			
 		};
+
+		// $scope.DownloadFile = function(res, req) {
+		// 	console.log("Download File");
+		// 	$http.post('/download', $scope.formData).success(function(err, data){
+		// 		if(err) {
+		// 			console.log(err);		
+		// 		}
+		// 	});
+			
+		// };
 
 
 		// $scope.userExist = false;
